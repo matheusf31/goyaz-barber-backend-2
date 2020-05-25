@@ -1,12 +1,12 @@
-import { getRepository } from 'typeorm';
+import { injectable, inject } from 'tsyringe';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-import authConfig from '../config/auth';
+import authConfig from '@config/auth';
 
-import AppError from '../errors/AppError';
-
-import User from '../models/User';
+import AppError from '@shared/errors/AppError';
+import User from '@modules/users/infra/typeorm/entities/User';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
   email: string;
@@ -18,11 +18,15 @@ interface IResponse {
   token: string;
 }
 
+@injectable()
 class AuthenticateUserService {
-  public async execute({ email, password }: IRequest): Promise<IResponse> {
-    const usersRepository = getRepository(User);
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+  ) {}
 
-    const user = await usersRepository.findOne({ where: { email } });
+  public async execute({ email, password }: IRequest): Promise<IResponse> {
+    const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
       throw new AppError('Usuário com este email não existe.', 401);
