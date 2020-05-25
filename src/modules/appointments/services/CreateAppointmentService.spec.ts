@@ -4,7 +4,7 @@ import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRe
 import CreateAppointmentService from './CreateAppointmentService';
 
 describe('CreateAppointment', () => {
-  it('deve ser possível criar um novo agendamento', async () => {
+  it('should be able to create a new appointment', async () => {
     const fakeAppointmentsRepository = new FakeAppointmentsRepository();
 
     // Aqui o container do tsyringe não é utilizado
@@ -21,7 +21,7 @@ describe('CreateAppointment', () => {
     expect(appointment.provider_id).toBe('123123');
   });
 
-  it('não deve ser possível criar dois agendamentos no mesmo horário', async () => {
+  it('should not be able to create a new appointment at the same time as another', async () => {
     const fakeAppointmentsRepository = new FakeAppointmentsRepository();
 
     // Aqui o container do tsyringe não é utilizado
