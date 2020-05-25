@@ -1,11 +1,46 @@
-// import CreateAppointmentService from './CreateAppointmentService';
+import AppError from '@shared/errors/AppError';
 
-// describe('CreateAppointment', () => {
-//   it('deve ser possível criar um novo agendamento', () => {
-//     expect(1 + 2).toBe(3);
-//   });
+import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
+import CreateAppointmentService from './CreateAppointmentService';
 
-//   it('não deve ser possível criar dois agendamentos no mesmo horário', () => {
-//     expect(1 + 2).toBe(3);
-//   });
-// });
+describe('CreateAppointment', () => {
+  it('deve ser possível criar um novo agendamento', async () => {
+    const fakeAppointmentsRepository = new FakeAppointmentsRepository();
+
+    // Aqui o container do tsyringe não é utilizado
+    const createAppointment = new CreateAppointmentService(
+      fakeAppointmentsRepository,
+    );
+
+    const appointment = await createAppointment.execute({
+      date: new Date(),
+      provider_id: '123123',
+    });
+
+    expect(appointment).toHaveProperty('id');
+    expect(appointment.provider_id).toBe('123123');
+  });
+
+  it('não deve ser possível criar dois agendamentos no mesmo horário', async () => {
+    const fakeAppointmentsRepository = new FakeAppointmentsRepository();
+
+    // Aqui o container do tsyringe não é utilizado
+    const createAppointment = new CreateAppointmentService(
+      fakeAppointmentsRepository,
+    );
+
+    const appointmentDate = new Date(2020, 4, 10, 11);
+
+    await createAppointment.execute({
+      date: appointmentDate,
+      provider_id: '123123',
+    });
+
+    await expect(
+      createAppointment.execute({
+        date: appointmentDate,
+        provider_id: '123123',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+});
