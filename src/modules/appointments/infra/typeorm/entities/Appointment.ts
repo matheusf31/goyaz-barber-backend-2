@@ -25,6 +25,18 @@ class Appointment {
   @Column('timestamp with time zone')
   date: Date;
 
+  @Column()
+  service: string;
+
+  @Column('decimal')
+  price: number;
+
+  @Column()
+  foreign_client_name: string;
+
+  @Column('timestamp with time zone')
+  canceled_at: Date;
+
   @CreateDateColumn()
   created_at: Date;
 
