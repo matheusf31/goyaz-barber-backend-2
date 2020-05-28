@@ -17,13 +17,20 @@ class User {
   @Column()
   email: string;
 
-  // colocar o ManyToOne para a tabela de appointments
-
   @Column()
   password: string;
 
   @Column()
   avatar: string;
+
+  @Column('boolean')
+  is_provider: boolean;
+
+  @Column('boolean')
+  is_admin: boolean;
+
+  @Column('boolean')
+  banned: boolean;
 
   @CreateDateColumn()
   created_at: Date;
