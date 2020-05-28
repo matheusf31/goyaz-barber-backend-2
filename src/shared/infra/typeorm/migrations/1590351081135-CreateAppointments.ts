@@ -23,6 +23,28 @@ export default class CreateAppointments1590351081135
             type: 'timestamp with time zone',
           },
           {
+            name: 'service',
+            type: 'varchar',
+          },
+          {
+            name: 'price',
+            type: 'decimal',
+            precision: 10,
+            scale: 2,
+          },
+          {
+            name: 'foreign_client_name',
+            type: 'decimal',
+            precision: 10,
+            scale: 2,
+          },
+          {
+            name: 'canceled_at',
+            type: 'timestamp with time zone',
+            isNullable: true,
+            default: null,
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',
