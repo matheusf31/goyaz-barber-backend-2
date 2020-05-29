@@ -28,7 +28,7 @@
 </p> -->
 
 <p align="center">
-  <a href="#crystal_ball-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#crystal_ball-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </p>
 
 ## :crystal_ball: Technologies
