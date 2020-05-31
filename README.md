@@ -35,21 +35,21 @@
 
 This project was developed by [Me](https://www.linkedin.com/in/matheus-filipe-351106186/) with the following technologies:
 
-- [Node][nodejs]
-- [Express](https://expressjs.com/)
-- [Ts-node-dev](https://www.npmjs.com/package/ts-node-dev)
-- [Docker](https://www.docker.com/docker-community)
-- [TypeORM](https://typeorm.io/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Node-postgres](https://www.npmjs.com/package/pg)
-- [Redis](https://redis.io/)
-- [JWT](https://jwt.io/)
-- [Multer](https://github.com/expressjs/multer)
-- [Bcrypt](https://www.npmjs.com/package/bcrypt)
-- [Nodemailer](https://nodemailer.com/about/)
-- [Date-fns](https://date-fns.org/)
-- [Dotenv](https://www.npmjs.com/package/dotenv)
-- [VS Code][vc] with [ESLint][vceslint]
+- [node][nodejs]
+- [express](https://expressjs.com/)
+- [ts-node-dev](https://www.npmjs.com/package/ts-node-dev)
+- [docker](https://www.docker.com/docker-community)
+- [typeORM](https://typeorm.io/)
+- [postgreSQL](https://www.postgresql.org/)
+- [node-postgres](https://www.npmjs.com/package/pg)
+- [redis](https://redis.io/)
+- [jwt](https://jwt.io/)
+- [multer](https://github.com/expressjs/multer)
+- [bcrypt](https://www.npmjs.com/package/bcrypt)
+- [nodemailer](https://nodemailer.com/about/)
+- [date-fns](https://date-fns.org/)
+- [dotenv](https://www.npmjs.com/package/dotenv)
+- [vscode][vc] with [eslint][vceslint]
 
 ## :iphone: Mobile
 
