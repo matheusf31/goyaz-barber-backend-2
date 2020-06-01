@@ -12,10 +12,15 @@ class UserTokensRepository implements IUserTokensRepository {
   }
 
   public async generate(user_id: string): Promise<UserToken> {
+    /** TODO
+     *  [ ] verificar se aquele usuário já possui um token
+     *  [ ] se o token ainda estiver válido, mandar um aviso
+     *  [ ] se o token não estiver válido, mandar um novo token (deleteOldToken)
+     */
+
     let randomToken = '';
 
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
     const charactersLength = characters.length;
 

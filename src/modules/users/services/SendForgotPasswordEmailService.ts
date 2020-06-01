@@ -31,11 +31,17 @@ class SendForgotPasswordEmailService {
       throw new AppError('Não existe usuário com este email.');
     }
 
-    await this.userTokensRepository.generate(user.id);
+    /** TODO
+     *  [ ] verificar se aquele usuário já possui um token
+     *  [ ] se o token ainda estiver válido, mandar um aviso (throw error)
+     *  [ ] se o token não estiver válido, mandar um novo token (deletar o antigo e criar um novo)
+     */
 
-    this.mailProvider.sendMail(
+    const { token } = await this.userTokensRepository.generate(user.id);
+
+    await this.mailProvider.sendMail(
       email,
-      'Pedido de recuperação de senha recebido.',
+      `Pedido de recuperação de senha recebido: ${token}`,
     );
   }
 }
