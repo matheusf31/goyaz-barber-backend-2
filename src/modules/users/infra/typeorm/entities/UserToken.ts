@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  Generated,
 } from 'typeorm';
 
 @Entity('user_tokens')
@@ -16,7 +15,6 @@ class UserToken {
   user_id: string;
 
   @Column()
-  @Generated('uuid')
   token: string;
 
   @CreateDateColumn()
