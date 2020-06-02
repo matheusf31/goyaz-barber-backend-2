@@ -27,12 +27,12 @@ export default class CreateUsers1590375558208 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'is_provider',
+            name: 'provider',
             type: 'boolean',
             default: false,
           },
           {
-            name: 'is_admin',
+            name: 'admin',
             type: 'boolean',
             default: false,
           },

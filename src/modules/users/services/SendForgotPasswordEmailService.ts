@@ -3,7 +3,6 @@ import path from 'path';
 
 import AppError from '@shared/errors/AppError';
 
-// import User from '@modules/users/infra/typeorm/entities/User';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IUserTokensRepository from '../repositories/IUserTokensRepository';
@@ -32,11 +31,13 @@ class SendForgotPasswordEmailService {
       throw new AppError('Não existe usuário com este email.');
     }
 
-    /** TODO
-     *  [ ] verificar se aquele usuário já possui um token
-     *  [ ] se o token ainda estiver válido, mandar um aviso (throw error)
-     *  [ ] se o token não estiver válido, mandar um novo token (deletar o antigo e criar um novo)
-     */
+    const userTokenExist = await this.userTokensRepository.findTokenByUserId(
+      user.id,
+    );
+
+    if (userTokenExist) {
+      await this.userTokensRepository.deleteOldToken(userTokenExist);
+    }
 
     const { token } = await this.userTokensRepository.generate(user.id);
 

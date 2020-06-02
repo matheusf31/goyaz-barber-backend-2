@@ -1,3 +1,5 @@
+import { subHours } from 'date-fns';
+
 import AppError from '@shared/errors/AppError';
 
 import FakeMailProvider from '@shared/container/providers/MailProvider/fakes/FakeMailProvider';
@@ -61,5 +63,23 @@ describe('SendForgotPasswordEmail', () => {
     });
 
     expect(generateToken).toHaveBeenCalledWith(user.id);
+  });
+
+  it('it should delete the old token to create a new one', async () => {
+    const user = await fakeUsersRepository.create({
+      name: 'Teste',
+      email: 'test@gmail.com',
+      password: '123456',
+    });
+
+    const oldToken = await fakeUserTokensRepository.generate(user.id);
+
+    await sendForgotPasswordEmail.execute({
+      email: 'test@gmail.com',
+    });
+
+    expect(fakeUserTokensRepository.findByToken(oldToken.token)).toMatchObject(
+      {},
+    );
   });
 });

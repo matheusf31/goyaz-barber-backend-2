@@ -24,10 +24,10 @@ class User {
   avatar: string;
 
   @Column('boolean')
-  is_provider: boolean;
+  provider: boolean;
 
   @Column('boolean')
-  is_admin: boolean;
+  admin: boolean;
 
   @Column('boolean')
   banned: boolean;

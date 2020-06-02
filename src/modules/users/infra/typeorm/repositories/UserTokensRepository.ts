@@ -12,12 +12,6 @@ class UserTokensRepository implements IUserTokensRepository {
   }
 
   public async generate(user_id: string): Promise<UserToken> {
-    /** TODO
-     *  [ ] verificar se aquele usuário já possui um token
-     *  [ ] se o token ainda estiver válido, mandar um aviso
-     *  [ ] se o token não estiver válido, mandar um novo token (deleteOldToken)
-     */
-
     let randomToken = '';
 
     const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -46,6 +40,20 @@ class UserTokensRepository implements IUserTokensRepository {
     });
 
     return userToken;
+  }
+
+  public async findTokenByUserId(
+    user_id: string,
+  ): Promise<UserToken | undefined> {
+    const userToken = await this.ormRepository.findOne({
+      where: { user_id },
+    });
+
+    return userToken;
+  }
+
+  public async deleteOldToken(token: UserToken): Promise<void> {
+    await this.ormRepository.delete(token.id);
   }
 }
 
