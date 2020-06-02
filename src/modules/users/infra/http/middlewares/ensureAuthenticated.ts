@@ -35,6 +35,6 @@ export default function ensureAuthenticated(
 
     return next();
   } catch {
-    throw new AppError('Token JWT inválido', 401);
+    throw new AppError('Token inválido.', 401);
   }
 }

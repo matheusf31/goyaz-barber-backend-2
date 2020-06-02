@@ -32,7 +32,7 @@ class AuthenticateUserService {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('Usuário com este email não existe.', 401);
+      throw new AppError('Nenhum usuário com este email foi encontrado.', 401);
     }
 
     const passwordMatched = await this.hashProvider.compareHash(
@@ -41,7 +41,7 @@ class AuthenticateUserService {
     );
 
     if (!passwordMatched) {
-      throw new AppError('Senha incorreta.', 401);
+      throw new AppError('A senha está incorreta.', 401);
     }
 
     const { secret, expiresIn } = authConfig.jwt;

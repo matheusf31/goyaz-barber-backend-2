@@ -48,7 +48,7 @@ class UpdateProfileService {
     user.email = email;
 
     if (password && !old_password) {
-      throw new AppError('Você precisa informar a senha antiga. ');
+      throw new AppError('Você precisa informar a senha antiga.');
     }
 
     if (password && old_password) {
