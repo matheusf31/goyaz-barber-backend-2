@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { getHours } from 'date-fns';
+import { getHours, getMinutes, isAfter, isSaturday, isSunday } from 'date-fns';
 
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
@@ -12,6 +12,7 @@ interface IRequest {
 
 type IResponse = Array<{
   hour: number;
+  minute: number;
   available: boolean;
 }>;
 
@@ -39,27 +40,101 @@ class ListProviderDayAvailabilityService {
 
     /**
      * Refatorar essa parte para o meu app
-     * [ ] colocar os minutos também (8:30)
-     * [ ] deixar o length do eachHour dinâmico
+     * [x] colocar os minutos também (8:30)
+     * [x] verificar se o hot towel é 1 hora (É 30 MIN)
+     * [ ] verificar se o provider está com aquela hora marcada como OCUPADO
+     *  - criar a tabela de horários ocupados
+     * [ ] verificar se o dia foi marcado como indisponível
+     *  - criar a tabela de horários ocupados
      */
 
-    const hourStart = 8; // depende do final de semana
+    const schedule = [];
 
-    const eachHourArray = Array.from(
-      {
-        length: 10,
-      },
-      (_, index) => index + hourStart,
-    );
+    if (isSaturday(new Date(year, month, day))) {
+      schedule.push(
+        '09:00',
+        '09:30',
+        '10:00',
+        '10:30',
+        '11:00',
+        '11:30',
+        '13:30',
+        '14:00',
+        '14:30',
+        '15:00',
+        '15:30',
+        '16:00',
+        '16:30',
+        '17:00',
+      );
+    } else {
+      schedule.push(
+        '09:00',
+        '09:30',
+        '10:00',
+        '10:30',
+        '11:00',
+        '11:30',
+        '13:30',
+        '14:00',
+        '14:30',
+        '15:00',
+        '15:30',
+        '16:00',
+        '16:30',
+        '17:00',
+        '17:30',
+        '18:00',
+        '18:30',
+        '19:00',
+      );
+    }
 
-    const availability = eachHourArray.map(hour => {
+    const currentDate = new Date(Date.now());
+
+    const availability = schedule.map(time => {
+      const [hour, minute] = time.split(':');
+      const formatedHour = Number(hour);
+      const formatedMinute = Number(minute);
+
       const hasAppointmentInHour = appointments.find(
-        appointment => getHours(appointment.date) === hour,
+        appointment =>
+          getHours(appointment.date) === formatedHour &&
+          getMinutes(appointment.date) === formatedMinute,
+      );
+
+      const hasHourlyServiceThirtyMinutesFromTheCurrentTime = appointments.find(
+        appointment => {
+          const pastHour =
+            formatedMinute === 0 ? formatedHour - 1 : formatedHour;
+          const pastMinute =
+            formatedMinute === 0 ? formatedMinute + 30 : formatedMinute - 30;
+
+          return (
+            getHours(appointment.date) === pastHour &&
+            getMinutes(appointment.date) === pastMinute &&
+            (appointment.service === 'corte e barba' || 'corte e hot towel')
+          );
+        },
+      );
+
+      const compareDate = new Date(
+        year,
+        month - 1,
+        day,
+        formatedHour,
+        formatedMinute,
       );
 
       return {
-        hour,
-        available: !hasAppointmentInHour,
+        hour: formatedHour,
+        minute: formatedMinute,
+        available:
+          !hasAppointmentInHour &&
+          isAfter(compareDate, currentDate) &&
+          !isSunday(new Date(year, month, day)) &&
+          !hasHourlyServiceThirtyMinutesFromTheCurrentTime,
+        appointment: hasAppointmentInHour,
       };
     });
 
