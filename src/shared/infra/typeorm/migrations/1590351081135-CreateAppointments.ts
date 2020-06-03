@@ -37,6 +37,7 @@ export default class CreateAppointments1590351081135
             type: 'decimal',
             precision: 10,
             scale: 2,
+            isNullable: true,
           },
           {
             name: 'canceled_at',
