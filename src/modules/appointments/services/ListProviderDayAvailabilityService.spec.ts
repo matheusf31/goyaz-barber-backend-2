@@ -1,11 +1,12 @@
 // import AppError from '@shared/errors/AppError';
 
 import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository';
-// import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeUnavailablesRepository from '@modules/unavailables/repositories/fakes/FakeUnavailablesRepository';
 
 import ListProviderDayAvailabilityService from './ListProviderDayAvailabilityService';
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
+let fakeUnavailablesRepository: FakeUnavailablesRepository;
 let listProviderDayAvailability: ListProviderDayAvailabilityService;
 
 describe('ListProviderDayAvailability', () => {
@@ -13,12 +14,14 @@ describe('ListProviderDayAvailability', () => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
     listProviderDayAvailability = new ListProviderDayAvailabilityService(
       fakeAppointmentsRepository,
+      fakeUnavailablesRepository,
     );
   });
 
   /**
    * [ ] fazer verificação se o usuário existe na hora de fazer um agendamento
    * [ ] testar se domingo todos os horários estão indisponíveis (it should be list sunday unavailable)
+   * [ ] arrumar testes quebrados
    */
 
   it('should be able to list the day availability from provider', async () => {
@@ -60,66 +63,56 @@ describe('ListProviderDayAvailability', () => {
     expect(availability).toEqual(
       expect.arrayContaining([
         {
-          hour: 9,
-          minute: 0,
+          time: '09:00',
           available: false,
         },
         {
-          hour: 10,
-          minute: 30,
+          time: '10:30',
           available: false,
         },
         {
-          hour: 11,
-          minute: 30,
+          time: '11:30',
           available: true,
         },
         {
-          hour: 13,
-          minute: 30,
+          time: '13:30',
           available: true,
         },
         {
-          hour: 14,
-          minute: 0,
+          time: '14:00',
           available: false,
           appointment: appointment1,
         },
         {
-          hour: 14,
-          minute: 30,
+          time: '14:30',
           available: false,
           appointment: appointment2,
         },
         {
-          hour: 15,
-          minute: 0,
+          time: '15:00',
           available: false,
           appointment: appointment3,
         },
         {
-          hour: 15,
-          minute: 30,
+          time: '15:30',
           available: false,
         },
         {
-          hour: 16,
-          minute: 0,
+          time: '16:00',
           available: true,
         },
         {
-          hour: 19,
-          minute: 0,
+          time: '19:00',
           available: true,
         },
       ]),
     );
   });
 
-  it('should be able to list the day availability from provider in sunday', async () => {
+  it('should be able to list the day availability from provider in saturday', async () => {
     const appointment1 = await fakeAppointmentsRepository.create({
       provider_id: 'one-id',
-      date: new Date(2020, 4, 20, 14, 0, 0),
+      date: new Date(2020, 5, 20, 14, 0, 0),
       user_id: 'logged-user',
       service: 'corte',
       price: 25,
@@ -127,50 +120,45 @@ describe('ListProviderDayAvailability', () => {
 
     const appointment2 = await fakeAppointmentsRepository.create({
       provider_id: 'one-id',
-      date: new Date(2020, 4, 20, 16, 0, 0),
+      date: new Date(2020, 5, 20, 16, 0, 0),
       user_id: 'logged-user',
       service: 'hot towel',
       price: 35,
     });
 
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date(2020, 4, 20, 11).getTime();
+      return new Date(2020, 5, 20, 9).getTime();
     });
 
     const availabilityInSaturday = await listProviderDayAvailability.execute({
       provider_id: 'one-id',
       year: 2020,
-      month: 5,
+      month: 6,
       day: 20,
     });
 
     expect(availabilityInSaturday).toEqual(
       expect.arrayContaining([
         {
-          hour: 10,
-          minute: 30,
-          available: false,
+          time: '10:30',
+          available: true,
         },
         {
-          hour: 14,
-          minute: 0,
+          time: '14:00',
           available: false,
           appointment: appointment1,
         },
         {
-          hour: 16,
-          minute: 0,
+          time: '16:00',
           available: false,
           appointment: appointment2,
         },
         {
-          hour: 16,
-          minute: 30,
-          available: false,
+          time: '16:30',
+          available: true,
         },
         {
-          hour: 17,
-          minute: 0,
+          time: '17:00',
           available: true,
         },
       ]),

@@ -1,4 +1,4 @@
-import { startOfHour } from 'date-fns';
+import { getHours, isBefore, isSaturday, isSunday } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
@@ -10,7 +10,13 @@ import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 interface IRequest {
   provider_id: string;
   user_id: string;
-  service: 'corte' | 'corte e barba' | 'barba' | 'hot towel';
+  service:
+    | 'corte'
+    | 'corte e barba'
+    | 'barba'
+    | 'hot towel'
+    | 'corte e hot towel'
+    | 'any for test';
   date: Date;
 }
 
@@ -28,37 +34,49 @@ class CreateAppointmentService {
     date,
   }: IRequest): Promise<Appointment> {
     /**
-     * [ ] verificar se o usuário selecionado é provedor
+     * [x] verificar se o usuário selecionado é provedor
      * [x] extrair o preço baseado no service
-     * [x] verificar se o service foi inserido
+     * [ ] verificar se o service foi inserido
      *
      * [x] colocar os minutos também (8:30)
      * [x] não deixar o usuário marcar horário no domingo
-     * [ ] impedir usuário de marcar fora dos horários estipulados
-     * [ ] verificar se o hot towel é 1 hora
-     * [ ] verificar se o provider está com aquela hora marcada como OCUPADO
-     * [ ] verificar se o dia foi marcado como indisponível
+     * [x] impedir usuário de marcar fora dos horários estipulados
+
      */
 
-    /**
-     * ALTERAR AQUI
-     */
-    const appointmentDate = startOfHour(date); // allowed times: 8:00, 9:00, 10:00... (regra de negócio)
+    if (isBefore(date, Date.now())) {
+      throw new AppError(
+        'Você não pode criar um agendamento em uma data que já passou.',
+      );
+    }
+
+    if (isSunday(date)) {
+      throw new AppError('Você não pode fazer um agendamento no domingo.');
+    }
+
+    if (isSaturday(date) && (getHours(date) < 9 || getHours(date) > 17)) {
+      throw new AppError(
+        'Nos sábados você só pode fazer agendamentos entre as 9 e 17.',
+      );
+    }
+
+    if (!isSaturday(date) && (getHours(date) < 9 || getHours(date) > 19)) {
+      throw new AppError(
+        'Nos dias de semana você só pode fazer agendamentos entre as 9 e 19.',
+      );
+    }
 
     const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
-      appointmentDate,
+      date,
+      provider_id,
     );
 
     if (findAppointmentInSameDate) {
       throw new AppError('Esse horário já está ocupado.');
     }
 
-    if (!provider_id) {
-      throw new AppError('Nenhum barbeiro foi selecionado.');
-    }
-
-    if (!service) {
-      throw new AppError('Nenhum serviço foi selecionado.');
+    if (user_id === provider_id) {
+      throw new AppError('Você não pode marcar um agendamento consigo mesmo.');
     }
 
     let price: number;
@@ -80,9 +98,12 @@ class CreateAppointmentService {
         price = 25.0;
         break;
 
-      default:
-        price = 0;
+      case 'corte e hot towel':
+        price = 35.0;
         break;
+
+      default:
+        throw new AppError('Serviço inválido.');
     }
 
     const appointment = await this.appointmentsRepository.create({
@@ -90,7 +111,7 @@ class CreateAppointmentService {
       user_id,
       service,
       price,
-      date: appointmentDate,
+      date,
     });
 
     return appointment;

@@ -1,7 +1,18 @@
 import { injectable, inject } from 'tsyringe';
-import { getHours, getMinutes, isAfter, isSaturday, isSunday } from 'date-fns';
+import {
+  isAfter,
+  isSaturday,
+  isSunday,
+  format,
+  subMinutes,
+  endOfDay,
+  isEqual,
+} from 'date-fns';
 
+import IUnavailablesRepository from '@modules/unavailables/repositories/IUnavailablesRepository';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
+
+import Appointment from '../infra/typeorm/entities/Appointment';
 
 interface IRequest {
   provider_id: string;
@@ -11,9 +22,9 @@ interface IRequest {
 }
 
 type IResponse = Array<{
-  hour: number;
-  minute: number;
+  time: string;
   available: boolean;
+  appointment?: Appointment;
 }>;
 
 @injectable()
@@ -21,6 +32,9 @@ class ListProviderDayAvailabilityService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('UnavailablesRepository')
+    private unavailablesRepository: IUnavailablesRepository,
   ) {}
 
   public async execute({
@@ -38,19 +52,25 @@ class ListProviderDayAvailabilityService {
       },
     );
 
-    /**
-     * Refatorar essa parte para o meu app
-     * [x] colocar os minutos também (8:30)
-     * [x] verificar se o hot towel é 1 hora (É 30 MIN)
-     * [ ] verificar se o provider está com aquela hora marcada como OCUPADO
-     *  - criar a tabela de horários ocupados
-     * [ ] verificar se o dia foi marcado como indisponível
-     *  - criar a tabela de horários ocupados
-     */
+    const unavailableHours = await this.unavailablesRepository.findAllInDayUnavailable(
+      {
+        provider_id,
+        day,
+        month,
+        year,
+      },
+    );
 
     const schedule = [];
 
-    if (isSaturday(new Date(year, month, day))) {
+    const currentDate = new Date(Date.now());
+    const searchDate = new Date(year, month - 1, day);
+
+    const hasDayBusy = unavailableHours.find(unavailable => {
+      return isEqual(unavailable.date, endOfDay(searchDate));
+    });
+
+    if (isSaturday(new Date(year, month - 1, day))) {
       schedule.push(
         '09:00',
         '09:30',
@@ -90,51 +110,56 @@ class ListProviderDayAvailabilityService {
       );
     }
 
-    const currentDate = new Date(Date.now());
-
     const availability = schedule.map(time => {
       const [hour, minute] = time.split(':');
-      const formatedHour = Number(hour);
-      const formatedMinute = Number(minute);
 
-      const hasAppointmentInHour = appointments.find(
-        appointment =>
-          getHours(appointment.date) === formatedHour &&
-          getMinutes(appointment.date) === formatedMinute,
+      const searchDateTime = new Date(
+        year,
+        month - 1,
+        day,
+        Number(hour),
+        Number(minute),
       );
 
-      const hasHourlyServiceThirtyMinutesFromTheCurrentTime = appointments.find(
+      const hasUnavailableInHour = unavailableHours.find(
+        unavailable => format(unavailable.date, 'HH:mm') === time,
+      );
+
+      const hasAppointmentInHour = appointments.find(
+        appointment => format(appointment.date, 'HH:mm') === time,
+      );
+
+      /**
+       * checking thirty minutes in advance if there is a service whose duration is one hour
+       */
+      const hasHourlyServiceThirtyMinutesFromTheSearchDateTime = appointments.find(
         appointment => {
-          const pastHour =
-            formatedMinute === 0 ? formatedHour - 1 : formatedHour;
-          const pastMinute =
-            formatedMinute === 0 ? formatedMinute + 30 : formatedMinute - 30;
+          const thirtyMinutesInPast = format(
+            subMinutes(searchDateTime, 30),
+            'HH:mm',
+          );
 
           return (
-            getHours(appointment.date) === pastHour &&
-            getMinutes(appointment.date) === pastMinute &&
-            (appointment.service === 'corte e barba' || 'corte e hot towel')
+            format(appointment.date, 'HH:mm') === thirtyMinutesInPast &&
+            (appointment.service === 'corte e barba' ||
+              appointment.service === 'corte e hot towel')
           );
         },
       );
 
-      const compareDate = new Date(
-        year,
-        month - 1,
-        day,
-        formatedHour,
-        formatedMinute,
-      );
-
       return {
-        hour: formatedHour,
-        minute: formatedMinute,
+        time,
+        timeFormatted: format(searchDateTime, "yyyy-MM-dd'T'HH:mm:ssxxx"),
         available:
           !hasAppointmentInHour &&
-          isAfter(compareDate, currentDate) &&
-          !isSunday(new Date(year, month, day)) &&
-          !hasHourlyServiceThirtyMinutesFromTheCurrentTime,
+          isAfter(searchDateTime, currentDate) &&
+          !isSunday(searchDateTime) &&
+          !hasHourlyServiceThirtyMinutesFromTheSearchDateTime &&
+          !hasUnavailableInHour?.is_unavailable === true &&
+          !hasDayBusy?.is_unavailable === true,
         appointment: hasAppointmentInHour,
+        past: !isAfter(searchDateTime, currentDate),
+        providerBusy: hasUnavailableInHour?.is_unavailable,
       };
     });
 
