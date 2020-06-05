@@ -12,6 +12,8 @@ let listProviderDayAvailability: ListProviderDayAvailabilityService;
 describe('ListProviderDayAvailability', () => {
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
+    fakeUnavailablesRepository = new FakeUnavailablesRepository();
+
     listProviderDayAvailability = new ListProviderDayAvailabilityService(
       fakeAppointmentsRepository,
       fakeUnavailablesRepository,
@@ -64,46 +66,66 @@ describe('ListProviderDayAvailability', () => {
       expect.arrayContaining([
         {
           time: '09:00',
+          timeFormatted: '2020-05-19T09:00:00-03:00',
           available: false,
+          past: true,
         },
         {
           time: '10:30',
+          timeFormatted: '2020-05-19T10:30:00-03:00',
           available: false,
+          past: true,
         },
         {
           time: '11:30',
+          timeFormatted: '2020-05-19T11:30:00-03:00',
           available: true,
+          past: false,
         },
         {
           time: '13:30',
+          timeFormatted: '2020-05-19T13:30:00-03:00',
           available: true,
+          past: false,
         },
         {
           time: '14:00',
+          timeFormatted: '2020-05-19T14:00:00-03:00',
           available: false,
           appointment: appointment1,
+          past: false,
         },
         {
           time: '14:30',
+          timeFormatted: '2020-05-19T14:30:00-03:00',
           available: false,
           appointment: appointment2,
+          past: false,
         },
         {
           time: '15:00',
+          timeFormatted: '2020-05-19T15:00:00-03:00',
           available: false,
           appointment: appointment3,
+          past: false,
         },
         {
           time: '15:30',
+          timeFormatted: '2020-05-19T15:30:00-03:00',
           available: false,
+          past: false,
         },
         {
           time: '16:00',
+          timeFormatted: '2020-05-19T16:00:00-03:00',
           available: true,
+          past: false,
         },
         {
           time: '19:00',
+          timeFormatted: '2020-05-19T19:00:00-03:00',
           available: true,
+          past: false,
         },
       ]),
     );
@@ -141,25 +163,35 @@ describe('ListProviderDayAvailability', () => {
       expect.arrayContaining([
         {
           time: '10:30',
+          timeFormatted: '2020-06-20T10:30:00-03:00',
           available: true,
+          past: false,
         },
         {
           time: '14:00',
+          timeFormatted: '2020-06-20T14:00:00-03:00',
           available: false,
           appointment: appointment1,
+          past: false,
         },
         {
           time: '16:00',
+          timeFormatted: '2020-06-20T16:00:00-03:00',
           available: false,
           appointment: appointment2,
+          past: false,
         },
         {
           time: '16:30',
+          timeFormatted: '2020-06-20T16:30:00-03:00',
           available: true,
+          past: false,
         },
         {
           time: '17:00',
+          timeFormatted: '2020-06-20T17:00:00-03:00',
           available: true,
+          past: false,
         },
       ]),
     );

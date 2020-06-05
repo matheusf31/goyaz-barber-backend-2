@@ -64,6 +64,7 @@ class ListProviderDayAvailabilityService {
     const schedule = [];
 
     const currentDate = new Date(Date.now());
+
     const searchDate = new Date(year, month - 1, day);
 
     const hasDayBusy = unavailableHours.find(unavailable => {
