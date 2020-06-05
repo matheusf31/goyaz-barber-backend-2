@@ -1,5 +1,5 @@
-import { getRepository, Repository, Raw } from 'typeorm';
-// import { isEqual, getMonth, getYear, getDate } from 'date-fns';
+import { getRepository, Repository, Between } from 'typeorm';
+import { endOfDay } from 'date-fns';
 
 import IUnavailablesRepository from '@modules/unavailables/repositories/IUnavailablesRepository';
 
@@ -56,16 +56,13 @@ class UnavailablesRepository implements IUnavailablesRepository {
     month,
     year,
   }: IFindAllInDayUnavailableByDateDTO): Promise<Unavailable[]> {
-    const parsedDay = String(day).padStart(2, '0');
-    const parsedMonth = String(month).padStart(2, '0');
+    const searchDate = new Date(year, month - 1, day);
 
     const unavailables = await this.ormRepository.find({
+      select: ['is_unavailable', 'date'],
       where: {
         provider_id,
-        date: Raw(
-          dateFiealdName =>
-            `to_char(${dateFiealdName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
-        ),
+        date: Between(searchDate, endOfDay(searchDate)),
       },
     });
 
