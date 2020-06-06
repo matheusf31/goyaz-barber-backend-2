@@ -46,6 +46,9 @@ class Appointment {
   @Column()
   foreign_client_name: string;
 
+  @Column('boolean')
+  concluded: boolean;
+
   @Column('timestamp with time zone')
   canceled_at: Date;
 
