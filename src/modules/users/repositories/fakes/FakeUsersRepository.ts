@@ -32,7 +32,6 @@ class FakeUsersRepository implements IUsersRepository {
   }
 
   public async save(user: User): Promise<User> {
-    // Simulando o save
     const findIndex = this.users.findIndex(findUser => findUser.id === user.id);
 
     this.users[findIndex] = user;
@@ -50,6 +49,12 @@ class FakeUsersRepository implements IUsersRepository {
     }
 
     return providers;
+  }
+
+  public async findAllUsers(): Promise<User[]> {
+    const users = this.users.filter(user => !user.provider);
+
+    return users;
   }
 }
 
