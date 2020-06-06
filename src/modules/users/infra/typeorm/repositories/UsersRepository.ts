@@ -13,6 +13,17 @@ class UsersRepository implements IUsersRepository {
     this.ormRepository = getRepository(User);
   }
 
+  public async findAllUsers(): Promise<User[]> {
+    const users = await this.ormRepository.find({
+      where: {
+        provider: false,
+      },
+      select: ['id', 'name', 'avatar', 'email', 'banned'],
+    });
+
+    return users;
+  }
+
   public async findAllProviders({
     except_user_id,
   }: IFindAllProvidersDTO): Promise<User[]> {
