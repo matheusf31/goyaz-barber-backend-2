@@ -6,6 +6,7 @@ import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointment
 import IFindAllInDayProviderDTO from '@modules/appointments/dtos/IFindAllInDayFromProviderDTO';
 
 import Appointment from '../entities/Appointment';
+import Additional from '../entities/Additional';
 
 class AppointmentsRepository implements IAppointmentRepository {
   private ormRepository: Repository<Appointment>;
@@ -60,6 +61,19 @@ class AppointmentsRepository implements IAppointmentRepository {
       service,
       price,
     });
+
+    const additional = new Additional();
+
+    additional.appointment_id = appointment.id;
+    additional.total_income = price;
+    additional.services = JSON.stringify([
+      {
+        description: `${service}`,
+        value: `${price}`,
+      },
+    ]);
+
+    appointment.additionals = additional;
 
     await this.ormRepository.save(appointment);
 

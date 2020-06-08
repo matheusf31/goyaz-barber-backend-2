@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 import User from '@modules/users/infra/typeorm/entities/User';
+import Additional from './Additional';
 
 @Entity('appointments')
 class Appointment {
@@ -42,6 +44,11 @@ class Appointment {
 
   @Column('decimal')
   price: number;
+
+  @OneToOne(() => Additional, additional => additional.appointment, {
+    cascade: true,
+  })
+  additionals: Additional;
 
   @Column()
   foreign_client_name: string;

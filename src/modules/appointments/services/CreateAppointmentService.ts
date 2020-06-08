@@ -114,6 +114,10 @@ class CreateAppointmentService {
       date,
     });
 
+    appointment.additionals.services = JSON.parse(
+      appointment.additionals.services,
+    );
+
     return appointment;
   }
 }
