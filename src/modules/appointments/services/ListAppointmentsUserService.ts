@@ -27,7 +27,7 @@ class ListAppointmentsUserService {
       { user_id, month, year },
     );
 
-    const currentDate = new Date();
+    const currentDate = new Date(Date.now());
 
     /**
      * set past variable to true or false

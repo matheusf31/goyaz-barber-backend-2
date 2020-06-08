@@ -16,7 +16,7 @@ describe('ListProviderDayAvailability', () => {
     );
   });
 
-  it('should be able to list the appointments by provider', async () => {
+  it('should be able to list users schedules', async () => {
     const appointment1 = await fakeAppointmentsRepository.create({
       provider_id: 'one-id',
       date: new Date(2020, 4, 19, 14, 0, 0),
@@ -33,16 +33,26 @@ describe('ListProviderDayAvailability', () => {
       price: 25,
     });
 
+    const appointment3 = await fakeAppointmentsRepository.create({
+      provider_id: 'one-id',
+      date: new Date(2020, 4, 17, 14, 30, 0),
+      user_id: 'logged-user',
+      service: 'corte',
+      price: 25,
+    });
+
+    appointment3.concluded = true;
+
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date(2020, 4, 19, 11).getTime();
+      return new Date(2020, 4, 19, 9, 0, 0).getTime();
     });
 
     const appointments = await listAppointmentsUserService.execute({
       user_id: 'logged-user',
-      year: 2020,
       month: 5,
+      year: 2020,
     });
 
-    expect(appointments).toEqual([appointment1, appointment2]);
+    expect(appointments).toEqual([appointment1, appointment2, appointment3]);
   });
 });

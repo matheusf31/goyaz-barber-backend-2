@@ -37,6 +37,7 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
     const appointments = this.appointments.filter(
       appointment =>
         appointment.user_id === user_id &&
+        appointment.canceled_at === null &&
         getMonth(appointment.date) + 1 === month &&
         getYear(appointment.date) === year,
     );
