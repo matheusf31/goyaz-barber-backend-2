@@ -11,7 +11,7 @@ interface IRequest {
 }
 
 @injectable()
-class ListUsersService {
+class BanUserService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
@@ -30,4 +30,4 @@ class ListUsersService {
   }
 }
 
-export default ListUsersService;
+export default BanUserService;

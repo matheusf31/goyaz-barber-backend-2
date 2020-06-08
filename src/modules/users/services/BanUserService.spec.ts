@@ -1,4 +1,4 @@
-// import AppError from '@shared/errors/AppError';
+import AppError from '@shared/errors/AppError';
 
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
@@ -53,5 +53,14 @@ describe('CreateUser', () => {
     });
 
     expect(bannedUser.banned).toBe(false);
+  });
+
+  it('should not be able to unban a non existing user', async () => {
+    expect(
+      banUser.execute({
+        user_id: 'non-existing-user',
+        banned: false,
+      }),
+    ).rejects.toBeInstanceOf(AppError);
   });
 });
