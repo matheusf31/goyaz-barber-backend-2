@@ -34,9 +34,7 @@ export default class CreateAppointments1590351081135
           },
           {
             name: 'foreign_client_name',
-            type: 'decimal',
-            precision: 10,
-            scale: 2,
+            type: 'varchar',
             isNullable: true,
           },
           {
