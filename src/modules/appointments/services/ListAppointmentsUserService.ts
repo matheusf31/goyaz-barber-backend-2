@@ -1,4 +1,5 @@
 import { injectable, inject } from 'tsyringe';
+import { isBefore } from 'date-fns';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
 
@@ -22,8 +23,27 @@ class ListAppointmentsUserService {
     month,
     year,
   }: IRequest): Promise<Appointment[]> {
-    const appointments = await this.appointmentsRepository.findAllUserAppointmentsInMonth(
+    let appointments = await this.appointmentsRepository.findAllUserAppointmentsInMonth(
       { user_id, month, year },
+    );
+
+    const currentDate = new Date();
+
+    /**
+     * set past variable to true or false
+     */
+    // eslint-disable-next-line array-callback-return
+    appointments.map(appointment => {
+      // eslint-disable-next-line no-param-reassign
+      appointment.past = isBefore(appointment.date, currentDate);
+    });
+
+    /**
+     * get just income appointments and concluded appointments
+     */
+    appointments = appointments.filter(
+      appointment =>
+        appointment.past === false || appointment.concluded === true,
     );
 
     // eslint-disable-next-line array-callback-return
