@@ -20,6 +20,7 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
     const appointments = this.appointments.filter(
       appointment =>
         appointment.provider_id === provider_id &&
+        appointment.canceled_at === null &&
         getDate(appointment.date) === day &&
         getMonth(appointment.date) + 1 === month &&
         getYear(appointment.date) === year,
@@ -94,7 +95,7 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
       service,
       price,
       foreign_client_name,
-      canceled_at: '',
+      canceled_at: null,
       concluded: false,
     });
 
