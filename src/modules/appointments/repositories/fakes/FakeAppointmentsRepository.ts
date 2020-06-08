@@ -4,6 +4,7 @@ import { isEqual, getMonth, getYear, getDate } from 'date-fns';
 import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 import IFindAllInDayProviderDTO from '@modules/appointments/dtos/IFindAllInDayFromProviderDTO';
+import IFindAllUserAppointmentsInMonthDTO from '@modules/appointments/dtos/IFindAllUserAppointmentsInMonthDTO';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 
@@ -27,6 +28,21 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
     return appointments;
   }
 
+  public async findAllUserAppointmentsInMonth({
+    user_id,
+    month,
+    year,
+  }: IFindAllUserAppointmentsInMonthDTO): Promise<Appointment[]> {
+    const appointments = this.appointments.filter(
+      appointment =>
+        appointment.user_id === user_id &&
+        getMonth(appointment.date) + 1 === month &&
+        getYear(appointment.date) === year,
+    );
+
+    return appointments;
+  }
+
   public async findByDate(
     date: Date,
     provider_id: string,
@@ -40,12 +56,33 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
     return findAppointment;
   }
 
+  public async findById(
+    appointment_id: string,
+  ): Promise<Appointment | undefined> {
+    const findAppointment = this.appointments.find(
+      appointment => appointment.id === appointment_id,
+    );
+
+    return findAppointment;
+  }
+
+  public async save(appointment: Appointment): Promise<Appointment> {
+    const findIndex = this.appointments.findIndex(
+      findAppointment => findAppointment.id === appointment.id,
+    );
+
+    this.appointments[findIndex] = appointment;
+
+    return appointment;
+  }
+
   public async create({
     user_id,
     provider_id,
     service,
     price,
     date,
+    foreign_client_name,
   }: ICreateAppointmentDTO): Promise<Appointment> {
     const appointment = new Appointment();
 
@@ -56,6 +93,23 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
       user_id,
       service,
       price,
+      foreign_client_name,
+      canceled_at: '',
+      concluded: false,
+    });
+
+    Object.assign(appointment, {
+      additionals: {
+        id: uuid(),
+        appointment_id: appointment.id,
+        services: JSON.stringify([
+          {
+            description: `${service}`,
+            value: `${price}`,
+          },
+        ]),
+        total_income: price,
+      },
     });
 
     this.appointments.push(appointment);
