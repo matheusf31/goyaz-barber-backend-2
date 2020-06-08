@@ -45,16 +45,18 @@ class Appointment {
   @Column('decimal')
   price: number;
 
-  @OneToOne(() => Additional, additional => additional.appointment, {
-    cascade: true,
-  })
-  additionals: Additional;
+  past: boolean;
+
+  @Column('boolean')
+  concluded: boolean;
 
   @Column()
   foreign_client_name: string;
 
-  @Column('boolean')
-  concluded: boolean;
+  @OneToOne(() => Additional, additional => additional.appointment, {
+    cascade: true,
+  })
+  additionals: Additional;
 
   @Column('timestamp with time zone')
   canceled_at: Date;
