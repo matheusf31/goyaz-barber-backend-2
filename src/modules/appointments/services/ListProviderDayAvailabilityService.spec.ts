@@ -1,3 +1,4 @@
+import { endOfDay } from 'date-fns';
 // import AppError from '@shared/errors/AppError';
 
 import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository';
@@ -49,6 +50,12 @@ describe('ListProviderDayAvailability', () => {
       user_id: 'logged-user',
       service: 'corte e barba',
       price: 35,
+    });
+
+    await fakeUnavailablesRepository.create({
+      provider_id: 'one-id',
+      date: new Date(2020, 4, 19, 16, 0, 0),
+      is_unavailable: true,
     });
 
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
@@ -118,8 +125,9 @@ describe('ListProviderDayAvailability', () => {
         {
           time: '16:00',
           timeFormatted: '2020-05-19T16:00:00-03:00',
-          available: true,
+          available: false,
           past: false,
+          providerBusy: true,
         },
         {
           time: '19:00',
@@ -191,6 +199,60 @@ describe('ListProviderDayAvailability', () => {
           time: '17:00',
           timeFormatted: '2020-06-20T17:00:00-03:00',
           available: true,
+          past: false,
+        },
+      ]),
+    );
+  });
+
+  it('should be able to list all day unavailable', async () => {
+    await fakeUnavailablesRepository.create({
+      provider_id: 'one-id',
+      date: endOfDay(new Date(2020, 4, 19)),
+      is_unavailable: true,
+    });
+
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2020, 4, 19, 11).getTime();
+    });
+
+    const availability = await listProviderDayAvailability.execute({
+      provider_id: 'one-id',
+      year: 2020,
+      month: 5,
+      day: 19,
+    });
+
+    expect(availability).toEqual(
+      expect.arrayContaining([
+        {
+          time: '09:00',
+          timeFormatted: '2020-05-19T09:00:00-03:00',
+          available: false,
+          past: true,
+        },
+        {
+          time: '10:30',
+          timeFormatted: '2020-05-19T10:30:00-03:00',
+          available: false,
+          past: true,
+        },
+        {
+          time: '11:30',
+          timeFormatted: '2020-05-19T11:30:00-03:00',
+          available: false,
+          past: false,
+        },
+        {
+          time: '13:30',
+          timeFormatted: '2020-05-19T13:30:00-03:00',
+          available: false,
+          past: false,
+        },
+        {
+          time: '14:00',
+          timeFormatted: '2020-05-19T14:00:00-03:00',
+          available: false,
           past: false,
         },
       ]),
