@@ -1,6 +1,6 @@
 export default interface ICreateAppointmentDTO {
   provider_id: string;
-  user_id: string;
+  user_id?: string;
   service:
     | 'corte'
     | 'corte e barba'
@@ -9,4 +9,5 @@ export default interface ICreateAppointmentDTO {
     | 'corte e hot towel';
   price: number;
   date: Date;
+  foreign_client_name?: string;
 }
