@@ -1,4 +1,5 @@
 import { injectable, inject } from 'tsyringe';
+import { subMinutes, isBefore } from 'date-fns';
 
 import AppError from '@shared/errors/AppError';
 
@@ -30,11 +31,22 @@ class CancelAppointmentService {
       throw new AppError('O agendamento não foi encontrado.');
     }
 
+    const appointmentDateSubThirtyMinutes = subMinutes(appointment.date, 30);
+
     if (
       appointment.user_id !== logged_user_id &&
       appointment.provider_id !== logged_user_id
     ) {
       throw new AppError('Você não pode cancelar esse agendamento.');
+    }
+
+    if (
+      appointment.user_id === logged_user_id &&
+      isBefore(appointmentDateSubThirtyMinutes, new Date())
+    ) {
+      throw new AppError(
+        'Você não pode mais desmarcar o agendamento, ligue para o barbeiro.',
+      );
     }
 
     appointment.canceled_at = new Date(Date.now());

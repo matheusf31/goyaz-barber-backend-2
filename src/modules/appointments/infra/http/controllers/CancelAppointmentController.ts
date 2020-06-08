@@ -12,8 +12,8 @@ export default class CancelAppointmentController {
     const cancelAppointment = container.resolve(CancelAppointmentService);
 
     const appointment = await cancelAppointment.execute({
-      appointment_id,
       logged_user_id,
+      appointment_id,
     });
 
     return response.json(appointment);
