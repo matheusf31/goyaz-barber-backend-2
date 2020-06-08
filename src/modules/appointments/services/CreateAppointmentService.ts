@@ -9,7 +9,7 @@ import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {
   provider_id: string;
-  user_id: string;
+  user_id?: string;
   service:
     | 'corte'
     | 'corte e barba'
@@ -18,6 +18,7 @@ interface IRequest {
     | 'corte e hot towel'
     | 'any for test';
   date: Date;
+  foreign_client_name?: string;
 }
 
 @injectable()
@@ -32,18 +33,8 @@ class CreateAppointmentService {
     user_id,
     service,
     date,
+    foreign_client_name,
   }: IRequest): Promise<Appointment> {
-    /**
-     * [x] verificar se o usuário selecionado é provedor
-     * [x] extrair o preço baseado no service
-     * [ ] verificar se o service foi inserido
-     *
-     * [x] colocar os minutos também (8:30)
-     * [x] não deixar o usuário marcar horário no domingo
-     * [x] impedir usuário de marcar fora dos horários estipulados
-
-     */
-
     if (isBefore(date, Date.now())) {
       throw new AppError(
         'Você não pode criar um agendamento em uma data que já passou.',
@@ -112,6 +103,7 @@ class CreateAppointmentService {
       service,
       price,
       date,
+      foreign_client_name,
     });
 
     appointment.additionals.services = JSON.parse(
