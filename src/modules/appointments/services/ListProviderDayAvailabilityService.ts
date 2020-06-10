@@ -25,6 +25,8 @@ type IResponse = Array<{
   time: string;
   available: boolean;
   appointment?: Appointment;
+  past: boolean;
+  providerBusy: boolean | undefined;
 }>;
 
 @injectable()
