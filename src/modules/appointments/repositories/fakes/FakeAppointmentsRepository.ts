@@ -29,6 +29,21 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
     return appointments;
   }
 
+  public async findAllInMonthFromProvider({
+    provider_id,
+    month,
+    year,
+  }: IFindAllInDayProviderDTO): Promise<Appointment[]> {
+    const appointments = this.appointments.filter(
+      appointment =>
+        appointment.provider_id === provider_id &&
+        getMonth(appointment.date) + 1 === month &&
+        getYear(appointment.date) === year,
+    );
+
+    return appointments;
+  }
+
   public async findAllUserAppointmentsInMonth({
     user_id,
     month,
@@ -104,19 +119,21 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
       additionals: {
         id: uuid(),
         appointment_id: appointment.id,
-        services: JSON.stringify([
-          {
-            description: `${service}`,
-            value: `${price}`,
-          },
-        ]),
-        total_income: price,
+        total_income: 0,
       },
     });
 
     this.appointments.push(appointment);
 
     return appointment;
+  }
+
+  public async delete(appointment_id: string): Promise<void> {
+    const findIndex = this.appointments.findIndex(
+      appointment => appointment.id === appointment_id,
+    );
+
+    this.appointments.splice(findIndex, 1);
   }
 }
 
