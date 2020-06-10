@@ -42,6 +42,12 @@ describe('ListProviderDayAvailability', () => {
     });
 
     appointment3.concluded = true;
+    appointment3.additionals.services = JSON.stringify([
+      {
+        description: 'corte',
+        price: 25,
+      },
+    ]);
 
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
       return new Date(2020, 4, 19, 9, 0, 0).getTime();

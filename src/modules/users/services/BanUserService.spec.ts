@@ -56,7 +56,7 @@ describe('CreateUser', () => {
   });
 
   it('should not be able to unban a non existing user', async () => {
-    expect(
+    await expect(
       banUser.execute({
         user_id: 'non-existing-user',
         banned: false,

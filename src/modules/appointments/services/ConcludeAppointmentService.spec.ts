@@ -49,7 +49,7 @@ describe('CreateAppointment', () => {
   });
 
   it('should not be able to conclude a non existing appointment', async () => {
-    expect(
+    await expect(
       concludeAppointment.execute({
         appointment_id: 'non-existing-appointment-id',
         concluded: true,
