@@ -20,18 +20,18 @@ appointmentsRouter.use(ensureAuthenticated);
 appointmentsRouter.get('/', userAppointmentsController.index);
 appointmentsRouter.post('/', userAppointmentsController.create);
 appointmentsRouter.patch(
-  '/cancel/:appointment_id',
+  '/user/cancel/:appointment_id',
   userAppointmentsController.update,
 );
 
 appointmentsRouter.patch(
-  '/conclude/:appointment_id',
+  '/provider/conclude/:appointment_id',
   concludedAppointmentController.update,
 );
 
 appointmentsRouter.post('/provider', providerAppointmentController.create);
 appointmentsRouter.delete(
-  '/:appointment_id',
+  '/provider/delete/:appointment_id',
   providerAppointmentController.delete,
 );
 
