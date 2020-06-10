@@ -21,6 +21,9 @@ class User {
   password: string;
 
   @Column()
+  phone: string;
+
+  @Column()
   avatar: string;
 
   @Column('boolean')
