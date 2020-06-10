@@ -4,7 +4,7 @@ import { container } from 'tsyringe';
 
 import ConcludeAppointmentService from '@modules/appointments/services/ConcludeAppointmentService';
 
-export default class CancelAppointmentController {
+export default class UserCancelAppointmentController {
   public async update(request: Request, response: Response): Promise<Response> {
     const { appointment_id } = request.params;
     const { concluded } = request.body;
