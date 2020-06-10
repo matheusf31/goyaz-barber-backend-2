@@ -22,6 +22,7 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "prettier/prettier": "error",
+    "import/no-duplicates": "off",
     "class-methods-use-this": "off",
     "no-useless-constructor": "off",
     "no-plusplus": "off",
