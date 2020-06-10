@@ -78,19 +78,19 @@ class CreateAppointmentService {
         break;
 
       case 'barba':
-        price = 25.0;
+        price = 18;
         break;
 
       case 'corte e barba':
-        price = 35.0;
+        price = 35;
         break;
 
       case 'hot towel':
-        price = 25.0;
+        price = 25;
         break;
 
       case 'corte e hot towel':
-        price = 35.0;
+        price = 35;
         break;
 
       default:
@@ -105,10 +105,6 @@ class CreateAppointmentService {
       date,
       foreign_client_name,
     });
-
-    appointment.additionals.services = JSON.parse(
-      appointment.additionals.services,
-    );
 
     return appointment;
   }
