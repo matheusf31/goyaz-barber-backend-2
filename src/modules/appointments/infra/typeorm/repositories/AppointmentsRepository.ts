@@ -119,7 +119,9 @@ class AppointmentsRepository implements IAppointmentRepository {
   public async findById(
     appointment_id: string,
   ): Promise<Appointment | undefined> {
-    const appointment = await this.ormRepository.findOne(appointment_id);
+    const appointment = await this.ormRepository.findOne(appointment_id, {
+      relations: ['additionals'],
+    });
 
     return appointment;
   }
@@ -148,6 +150,7 @@ class AppointmentsRepository implements IAppointmentRepository {
     const additional = new Additional();
 
     additional.appointment_id = appointment.id;
+    additional.services = JSON.stringify([]);
     additional.total_income = 0;
 
     appointment.additionals = additional;
