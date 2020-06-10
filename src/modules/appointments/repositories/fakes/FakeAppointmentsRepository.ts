@@ -120,6 +120,7 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
         id: uuid(),
         appointment_id: appointment.id,
         total_income: 0,
+        services: JSON.stringify([]),
       },
     });
 
