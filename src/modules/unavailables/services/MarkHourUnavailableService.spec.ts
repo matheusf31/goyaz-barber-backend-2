@@ -6,7 +6,7 @@ import MarkHourUnavailableService from './MarkHourUnavailableService';
 let fakeUnavailablesRepository: FakeUnavailablesRepository;
 let markHourUnavailable: MarkHourUnavailableService;
 
-describe('CreateAppointment', () => {
+describe('MarkHourUnavailable', () => {
   beforeEach(() => {
     fakeUnavailablesRepository = new FakeUnavailablesRepository();
 
