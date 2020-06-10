@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { celebrate, Segments, Joi } from 'celebrate';
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 import ProviderAppointmentController from '../controllers/ProviderAppointmentController';
@@ -17,26 +18,89 @@ const additionalController = new AdditionalController();
 
 appointmentsRouter.use(ensureAuthenticated);
 
+/**
+ * User Appointment Controller
+ */
 appointmentsRouter.get('/', userAppointmentsController.index);
-appointmentsRouter.post('/', userAppointmentsController.create);
+
+appointmentsRouter.post(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      provider_id: Joi.string().uuid().required(),
+      date: Joi.date(),
+      service: Joi.string().required(),
+    },
+  }),
+  userAppointmentsController.create,
+);
+
 appointmentsRouter.patch(
   '/user/cancel/:appointment_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      appointment_id: Joi.string().uuid().required(),
+    },
+  }),
   userAppointmentsController.update,
 );
 
-appointmentsRouter.patch(
-  '/provider/conclude/:appointment_id',
-  concludedAppointmentController.update,
+/**
+ * Provider Appointment Controller
+ */
+appointmentsRouter.post(
+  '/provider',
+  celebrate({
+    [Segments.BODY]: {
+      user_id: Joi.string().uuid(),
+      date: Joi.date(),
+      service: Joi.string().required(),
+      foreign_client_name: Joi.string(),
+    },
+  }),
+  providerAppointmentController.create,
 );
 
-appointmentsRouter.post('/provider', providerAppointmentController.create);
 appointmentsRouter.delete(
   '/provider/delete/:appointment_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      appointment_id: Joi.string().uuid().required(),
+    },
+  }),
   providerAppointmentController.delete,
+);
+
+/**
+ * Concluded Appointment Controller
+ */
+appointmentsRouter.patch(
+  '/provider/conclude/:appointment_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      appointment_id: Joi.string().uuid().required(),
+    },
+    [Segments.BODY]: {
+      concluded: Joi.boolean().required(),
+    },
+  }),
+  concludedAppointmentController.update,
 );
 
 appointmentsRouter.get('/info', appointmentsInfoController.index);
 
-appointmentsRouter.put('/additional', additionalController.update);
+appointmentsRouter.put(
+  '/additional',
+  celebrate({
+    [Segments.BODY]: {
+      appointment_id: Joi.string().uuid().required(),
+      additional: Joi.object({
+        description: Joi.string().required(),
+        value: Joi.number().required(),
+      }).required(),
+    },
+  }),
+  additionalController.update,
+);
 
 export default appointmentsRouter;

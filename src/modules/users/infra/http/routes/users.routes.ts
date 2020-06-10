@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { celebrate, Segments, Joi } from 'celebrate';
+
 import multer from 'multer';
 import uploadConfig from '@config/upload';
 
@@ -16,9 +18,33 @@ const banController = new BanController();
 const userAvatarController = new UserAvatarController();
 
 usersRouter.get('/', usersController.index);
-usersRouter.post('/', usersController.create);
 
-usersRouter.patch('/ban', banController.update);
+usersRouter.post(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().required(),
+      email: Joi.string().email().required(),
+      phone: Joi.string()
+        .required()
+        .pattern(/^(62|062)(\d{4,5}-?\d{4})$/),
+      password: Joi.string().required(),
+      provider: Joi.boolean(),
+    },
+  }),
+  usersController.create,
+);
+
+usersRouter.patch(
+  '/ban',
+  celebrate({
+    [Segments.BODY]: {
+      user_id: Joi.string().uuid().required(),
+      banned: Joi.boolean().required(),
+    },
+  }),
+  banController.update,
+);
 
 usersRouter.patch(
   '/avatar',
