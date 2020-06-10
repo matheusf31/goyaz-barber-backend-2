@@ -3,7 +3,8 @@ import { Request, Response } from 'express';
 import { parseISO } from 'date-fns';
 import { container } from 'tsyringe';
 
-import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
+import ProviderCreateAppointmentService from '@modules/appointments/services/ProviderCreateAppointmentService';
+import ProviderDeleteAppointmentService from '@modules/appointments/services/ProviderDeleteAppointmentService';
 
 export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -12,9 +13,11 @@ export default class AppointmentsController {
 
     const parsedDate = parseISO(date);
 
-    const createAppointment = container.resolve(CreateAppointmentService);
+    const providerCreateAppointment = container.resolve(
+      ProviderCreateAppointmentService,
+    );
 
-    const appointment = await createAppointment.execute({
+    const appointment = await providerCreateAppointment.execute({
       provider_id,
       user_id,
       service,
@@ -23,5 +26,17 @@ export default class AppointmentsController {
     });
 
     return response.json(appointment);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const { appointment_id } = request.params;
+
+    const providerDeleteAppointment = container.resolve(
+      ProviderDeleteAppointmentService,
+    );
+
+    await providerDeleteAppointment.execute(appointment_id);
+
+    return response.status(204).json();
   }
 }
