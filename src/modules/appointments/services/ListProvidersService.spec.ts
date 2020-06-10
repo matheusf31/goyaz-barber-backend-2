@@ -17,6 +17,7 @@ describe('ListAllProviders', () => {
     const user1 = await fakeUsersRepository.create({
       name: 'John',
       email: 'one@gmail.com',
+      phone: '6299462353',
       password: '123456',
       provider: true,
     });
@@ -24,6 +25,7 @@ describe('ListAllProviders', () => {
     await fakeUsersRepository.create({
       name: 'John',
       email: 'two@gmail.com',
+      phone: '6299462353',
       password: '123456',
       provider: false,
     });
@@ -31,6 +33,7 @@ describe('ListAllProviders', () => {
     const user3 = await fakeUsersRepository.create({
       name: 'John',
       email: 'three@gmail.com',
+      phone: '6299462353',
       password: '123456',
       provider: true,
     });
@@ -38,6 +41,7 @@ describe('ListAllProviders', () => {
     const loggedUser = await fakeUsersRepository.create({
       name: 'John',
       email: 'four@gmail.com',
+      phone: '6299462353',
       password: '123456',
       provider: true,
     });

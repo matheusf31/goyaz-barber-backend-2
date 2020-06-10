@@ -1,18 +1,18 @@
 import AppError from '@shared/errors/AppError';
 
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
-import CreateAppointmentService from './CreateAppointmentService';
+import UserCreateAppointmentService from './UserCreateAppointmentService';
 import ProviderDeleteAppointmentService from './ProviderDeleteAppointmentService';
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
-let createAppointment: CreateAppointmentService;
+let userCreateAppointment: UserCreateAppointmentService;
 let providerDeleteAppointmentService: ProviderDeleteAppointmentService;
 
 describe('CreateAppointment', () => {
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
 
-    createAppointment = new CreateAppointmentService(
+    userCreateAppointment = new UserCreateAppointmentService(
       fakeAppointmentsRepository,
     );
 
@@ -26,7 +26,7 @@ describe('CreateAppointment', () => {
       return new Date(2020, 4, 9, 10).getTime();
     });
 
-    const appointment = await createAppointment.execute({
+    const appointment = await userCreateAppointment.execute({
       date: new Date(2020, 4, 13, 15),
       provider_id: '123123',
       user_id: 'logged-user',

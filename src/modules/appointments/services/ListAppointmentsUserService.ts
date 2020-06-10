@@ -46,16 +46,6 @@ class ListAppointmentsUserService {
         appointment.past === false || appointment.concluded === true,
     );
 
-    // eslint-disable-next-line array-callback-return
-    appointments.map(appointment => {
-      if (appointment.additionals.services) {
-        // eslint-disable-next-line no-param-reassign
-        appointment.additionals.services = JSON.parse(
-          appointment.additionals.services,
-        );
-      }
-    });
-
     return appointments;
   }
 }
