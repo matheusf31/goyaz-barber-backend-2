@@ -23,6 +23,7 @@ describe('UpdateUserAvatar', () => {
     const user = await fakeUsersRepository.create({
       name: 'John',
       email: 'johndoe@gmail.com',
+      phone: '6299462353',
       password: '123456',
     });
 
@@ -49,6 +50,7 @@ describe('UpdateUserAvatar', () => {
     const user = await fakeUsersRepository.create({
       name: 'John',
       email: 'johndoe@gmail.com',
+      phone: '6299462353',
       password: '123456',
     });
 

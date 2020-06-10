@@ -10,7 +10,7 @@ let listUsers: ListUsersService;
 let fakeHashProvider: FakeHashProvider;
 let createUser: CreateUserService;
 
-describe('CreateUser', () => {
+describe('ListUsers', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvider();
@@ -23,6 +23,7 @@ describe('CreateUser', () => {
     await createUser.execute({
       name: 'John',
       email: 'john@gmail.com',
+      phone: '994622353',
       password: '123123',
       provider: true,
     });
@@ -30,6 +31,7 @@ describe('CreateUser', () => {
     const user2 = await createUser.execute({
       name: 'John',
       email: 'johndoe@gmail.com',
+      phone: '994622353',
       password: '123123',
       provider: false,
     });
@@ -37,6 +39,7 @@ describe('CreateUser', () => {
     const user3 = await createUser.execute({
       name: 'John',
       email: 'johnthree@gmail.com',
+      phone: '994622353',
       password: '123123',
       provider: false,
     });

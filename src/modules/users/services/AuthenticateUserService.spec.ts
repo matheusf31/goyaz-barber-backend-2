@@ -30,6 +30,7 @@ describe('AuthenticateUser', () => {
     const user = await createUser.execute({
       name: 'John Doe',
       email: 'johndoe@example.com',
+      phone: '994622353',
       password: '123456',
     });
 
@@ -56,6 +57,7 @@ describe('AuthenticateUser', () => {
     await createUser.execute({
       name: 'John Doe',
       email: 'johndoe@example.com',
+      phone: '994622353',
       password: '123456',
     });
 

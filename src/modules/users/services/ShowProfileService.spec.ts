@@ -6,7 +6,7 @@ import ShowProfileService from './ShowProfileService';
 let fakeUsersRepository: FakeUsersRepository;
 let showProfile: ShowProfileService;
 
-describe('UpdateProfile', () => {
+describe('ShowProfile', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
 
@@ -17,6 +17,7 @@ describe('UpdateProfile', () => {
     const user = await fakeUsersRepository.create({
       name: 'John',
       email: 'johndoe@gmail.com',
+      phone: '6299462353',
       password: '123456',
     });
 

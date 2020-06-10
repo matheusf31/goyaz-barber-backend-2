@@ -23,6 +23,7 @@ describe('UpdateProfile', () => {
     const user = await fakeUsersRepository.create({
       name: 'John',
       email: 'johndoe@gmail.com',
+      phone: '6299462353',
       password: '123456',
     });
 
@@ -40,12 +41,14 @@ describe('UpdateProfile', () => {
     await fakeUsersRepository.create({
       name: 'John',
       email: 'johndoe@gmail.com',
+      phone: '6299462353',
       password: '123456',
     });
 
     const user = await fakeUsersRepository.create({
       name: 'Test',
       email: 'test@gmail.com',
+      phone: '6299462353',
       password: '123456',
     });
 
@@ -62,6 +65,7 @@ describe('UpdateProfile', () => {
     const user = await fakeUsersRepository.create({
       name: 'John',
       email: 'johndoe@gmail.com',
+      phone: '6299462353',
       password: '123456',
     });
 
@@ -82,6 +86,7 @@ describe('UpdateProfile', () => {
     const user = await fakeUsersRepository.create({
       name: 'John',
       email: 'johndoe@gmail.com',
+      phone: '6299462353',
       password: '123456',
     });
 
@@ -99,6 +104,7 @@ describe('UpdateProfile', () => {
     const user = await fakeUsersRepository.create({
       name: 'John',
       email: 'johndoe@gmail.com',
+      phone: '6299462353',
       password: '123456',
     });
 

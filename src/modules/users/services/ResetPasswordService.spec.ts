@@ -27,6 +27,7 @@ describe('ResetPassword', () => {
     const user = await fakeUsersRepository.create({
       name: 'Teste',
       email: 'test@gmail.com',
+      phone: '994622353',
       password: '123456',
     });
 
@@ -71,6 +72,7 @@ describe('ResetPassword', () => {
     const user = await fakeUsersRepository.create({
       name: 'Teste',
       email: 'test@gmail.com',
+      phone: '994622353',
       password: '123456',
     });
 

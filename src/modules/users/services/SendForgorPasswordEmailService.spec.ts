@@ -1,5 +1,3 @@
-import { subHours } from 'date-fns';
-
 import AppError from '@shared/errors/AppError';
 
 import FakeMailProvider from '@shared/container/providers/MailProvider/fakes/FakeMailProvider';
@@ -31,6 +29,7 @@ describe('SendForgotPasswordEmail', () => {
     await fakeUsersRepository.create({
       name: 'Teste',
       email: 'test@gmail.com',
+      phone: '994622353',
       password: '123456',
     });
 
@@ -55,6 +54,7 @@ describe('SendForgotPasswordEmail', () => {
     const user = await fakeUsersRepository.create({
       name: 'Teste',
       email: 'test@gmail.com',
+      phone: '994622353',
       password: '123456',
     });
 
@@ -69,6 +69,7 @@ describe('SendForgotPasswordEmail', () => {
     const user = await fakeUsersRepository.create({
       name: 'Teste',
       email: 'test@gmail.com',
+      phone: '994622353',
       password: '123456',
     });
 
