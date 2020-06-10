@@ -8,7 +8,7 @@ let fakeAppointmentsRepository: FakeAppointmentsRepository;
 let userCreateAppointment: UserCreateAppointmentService;
 let concludeAppointment: ConcludeAppointmentService;
 
-describe('CreateAppointment', () => {
+describe('ConcludeAppointment', () => {
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
 
