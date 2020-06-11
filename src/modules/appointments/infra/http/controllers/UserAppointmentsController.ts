@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import { parseISO } from 'date-fns';
 
@@ -40,7 +41,7 @@ export default class AppointmentsController {
       year,
     });
 
-    return response.json(appointments);
+    return response.json(classToClass(appointments));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
