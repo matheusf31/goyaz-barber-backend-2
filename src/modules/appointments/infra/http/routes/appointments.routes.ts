@@ -28,7 +28,7 @@ appointmentsRouter.post(
   celebrate({
     [Segments.BODY]: {
       provider_id: Joi.string().uuid().required(),
-      date: Joi.date(),
+      date: Joi.string().required(),
       service: Joi.string().required(),
     },
   }),
@@ -53,7 +53,7 @@ appointmentsRouter.post(
   celebrate({
     [Segments.BODY]: {
       user_id: Joi.string().uuid(),
-      date: Joi.date(),
+      date: Joi.string().required(),
       service: Joi.string().required(),
       foreign_client_name: Joi.string(),
     },

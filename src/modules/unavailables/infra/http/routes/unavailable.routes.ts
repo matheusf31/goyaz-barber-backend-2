@@ -14,7 +14,7 @@ unavailableRouter.post(
   '/set-unavailable',
   celebrate({
     [Segments.BODY]: {
-      date: Joi.date().required(),
+      date: Joi.string().required(),
       is_unavailable: Joi.boolean().required(),
     },
   }),
