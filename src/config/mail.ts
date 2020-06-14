@@ -15,7 +15,7 @@ export default {
   defaults: {
     from: {
       email: 'matheus@tecteu.com',
-      name: 'Matheus desenvolvedor da GoyazBarber',
+      name: 'GoyazBarber',
     },
   },
 } as IMailConfig;
