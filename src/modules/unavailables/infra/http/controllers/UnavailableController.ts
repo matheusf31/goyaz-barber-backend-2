@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { parseISO } from 'date-fns';
 
 import { container } from 'tsyringe';
 
@@ -10,13 +9,11 @@ export default class AppointmentsController {
     const provider_id = request.user.id;
     const { date, is_unavailable } = request.body;
 
-    const parsedDate = parseISO(date);
-
     const markHourUnavailable = container.resolve(MarkHourUnavailableService);
 
     const availability = await markHourUnavailable.execute({
       provider_id,
-      date: parsedDate,
+      date,
       is_unavailable,
     });
 
