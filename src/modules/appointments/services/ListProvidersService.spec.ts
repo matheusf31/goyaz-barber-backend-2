@@ -54,6 +54,8 @@ describe('ListProviders', () => {
 
     const providers = await listProviders.execute({ user_id: loggedUser.id });
 
+    await listProviders.execute({ user_id: loggedUser.id });
+
     expect(providers).toEqual([user1, user3]);
   });
 });
