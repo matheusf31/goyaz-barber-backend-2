@@ -1,5 +1,12 @@
 import { uuid } from 'uuidv4';
-import { isEqual, getMonth, getYear, getDate } from 'date-fns';
+import {
+  isEqual,
+  getMonth,
+  getYear,
+  getDate,
+  addDays,
+  isBefore,
+} from 'date-fns';
 
 import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
@@ -69,6 +76,21 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
         isEqual(appointment.date, date) &&
         appointment.provider_id === provider_id,
     );
+
+    return findAppointment;
+  }
+
+  public async findLessThanWeek(
+    provider_id: string,
+  ): Promise<Appointment | undefined> {
+    const findAppointment = this.appointments.find(appointment => {
+      const compareDate = addDays(new Date(Date.now()), 6);
+
+      return (
+        isBefore(appointment.date, compareDate) &&
+        appointment.provider_id === provider_id
+      );
+    });
 
     return findAppointment;
   }

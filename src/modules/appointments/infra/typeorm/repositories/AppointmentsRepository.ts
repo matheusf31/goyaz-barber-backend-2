@@ -1,5 +1,5 @@
 import { getRepository, Repository, Between } from 'typeorm';
-import { endOfDay, endOfMonth } from 'date-fns';
+import { endOfDay, endOfMonth, addDays } from 'date-fns';
 
 import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
@@ -114,6 +114,31 @@ class AppointmentsRepository implements IAppointmentRepository {
     });
 
     return findAppointment;
+  }
+
+  public async findLessThanWeek(
+    provider_id: string,
+  ): Promise<Appointment | undefined> {
+    const appointment = await this.ormRepository.findOne({
+      where: {
+        provider_id,
+        canceled_at: null,
+        date: Between(new Date(), addDays(new Date(), 6)),
+      },
+      select: [
+        'id',
+        'concluded',
+        'date',
+        'foreign_client_name',
+        'service',
+        'price',
+        'canceled_at',
+        'user_id',
+      ],
+      relations: ['additionals', 'user'],
+    });
+
+    return appointment;
   }
 
   public async findById(

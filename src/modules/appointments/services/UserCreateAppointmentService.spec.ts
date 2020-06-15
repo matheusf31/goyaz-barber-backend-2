@@ -199,10 +199,34 @@ describe('UserCreateAppointment', () => {
 
     await expect(
       userCreateAppointment.execute({
-        date: new Date(2020, 4, 11, 14),
+        date: new Date(2020, 4, 17, 17),
         provider_id: 'provider-id',
         user_id: 'user-id',
-        service: 'any for test',
+        service: 'corte',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create a schedule if another one already exists in less than a week', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2020, 4, 11, 9).getTime();
+    });
+
+    const appointmentDate = new Date(2020, 4, 11, 10);
+
+    await userCreateAppointment.execute({
+      date: appointmentDate,
+      provider_id: 'provider-id',
+      user_id: 'user-id',
+      service: 'corte e barba',
+    });
+
+    await expect(
+      userCreateAppointment.execute({
+        date: new Date(2020, 4, 15, 14),
+        provider_id: 'provider-id',
+        user_id: 'user-id',
+        service: 'corte e barba',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

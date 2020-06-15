@@ -57,6 +57,10 @@ class UserCreateAppointmentService {
       );
     }
 
+    if (user_id === provider_id) {
+      throw new AppError('Você não pode marcar um agendamento consigo mesmo.');
+    }
+
     const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
       date,
       provider_id,
@@ -66,8 +70,14 @@ class UserCreateAppointmentService {
       throw new AppError('Esse horário já está ocupado.');
     }
 
-    if (user_id === provider_id) {
-      throw new AppError('Você não pode marcar um agendamento consigo mesmo.');
+    const findAppointmentLessThanWeekFromToday = await this.appointmentsRepository.findLessThanWeek(
+      provider_id,
+    );
+
+    if (findAppointmentLessThanWeekFromToday) {
+      throw new AppError(
+        'Você já possui um agendamento em menos de uma semana.',
+      );
     }
 
     let price: number;
