@@ -21,7 +21,16 @@ appointmentsRouter.use(ensureAuthenticated);
 /**
  * User Appointment Controller
  */
-appointmentsRouter.get('/', userAppointmentsController.index);
+appointmentsRouter.get(
+  '/',
+  celebrate({
+    [Segments.QUERY]: {
+      month: Joi.string().required(),
+      year: Joi.string().required(),
+    },
+  }),
+  userAppointmentsController.index,
+);
 
 appointmentsRouter.post(
   '/',
@@ -87,7 +96,19 @@ appointmentsRouter.patch(
   concludedAppointmentController.update,
 );
 
-appointmentsRouter.get('/info', appointmentsInfoController.index);
+appointmentsRouter.get(
+  '/info/:provider_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      provider_id: Joi.string().uuid().required(),
+    },
+    [Segments.QUERY]: {
+      month: Joi.string().required(),
+      year: Joi.string().required(),
+    },
+  }),
+  appointmentsInfoController.index,
+);
 
 appointmentsRouter.put(
   '/additional',

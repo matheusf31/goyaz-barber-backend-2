@@ -7,6 +7,21 @@ import UserCancelAppointmentService from '@modules/appointments/services/UserCan
 import UserCreateAppointmentService from '@modules/appointments/services/UserCreateAppointmentService';
 
 export default class AppointmentsController {
+  public async index(request: Request, response: Response): Promise<Response> {
+    const user_id = request.user.id;
+    const { month, year } = request.query;
+
+    const userListAppointments = container.resolve(UserListAppointmentsService);
+
+    const appointments = await userListAppointments.execute({
+      user_id,
+      month: Number(month),
+      year: Number(year),
+    });
+
+    return response.json(classToClass(appointments));
+  }
+
   public async create(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
     const { provider_id, date, service } = request.body;
@@ -23,21 +38,6 @@ export default class AppointmentsController {
     });
 
     return response.json(appointment);
-  }
-
-  public async index(request: Request, response: Response): Promise<Response> {
-    const user_id = request.user.id;
-    const { month, year } = request.body;
-
-    const userListAppointments = container.resolve(UserListAppointmentsService);
-
-    const appointments = await userListAppointments.execute({
-      user_id,
-      month,
-      year,
-    });
-
-    return response.json(classToClass(appointments));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
