@@ -17,7 +17,7 @@ describe('UserListAppointments', () => {
   });
 
   it('should be able to list users schedules', async () => {
-    const appointment1 = await fakeAppointmentsRepository.create({
+    await fakeAppointmentsRepository.create({
       provider_id: 'one-id',
       date: new Date(2020, 4, 19, 14, 0, 0),
       user_id: 'logged-user',
@@ -25,7 +25,7 @@ describe('UserListAppointments', () => {
       price: 25,
     });
 
-    const appointment2 = await fakeAppointmentsRepository.create({
+    await fakeAppointmentsRepository.create({
       provider_id: 'one-id',
       date: new Date(2020, 4, 19, 14, 30, 0),
       user_id: 'logged-user',
@@ -59,6 +59,6 @@ describe('UserListAppointments', () => {
       year: 2020,
     });
 
-    expect(appointments).toEqual([appointment1, appointment2, appointment3]);
+    expect(appointments).toEqual([appointment3]);
   });
 });

@@ -81,14 +81,14 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
   }
 
   public async findLessThanWeek(
-    provider_id: string,
+    user_id: string,
   ): Promise<Appointment | undefined> {
     const findAppointment = this.appointments.find(appointment => {
       const compareDate = addDays(new Date(Date.now()), 6);
 
       return (
         isBefore(appointment.date, compareDate) &&
-        appointment.provider_id === provider_id
+        appointment.user_id === user_id
       );
     });
 

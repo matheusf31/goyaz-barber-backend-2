@@ -117,11 +117,11 @@ class AppointmentsRepository implements IAppointmentRepository {
   }
 
   public async findLessThanWeek(
-    provider_id: string,
+    user_id: string,
   ): Promise<Appointment | undefined> {
     const appointment = await this.ormRepository.findOne({
       where: {
-        provider_id,
+        user_id,
         canceled_at: null,
         date: Between(new Date(), addDays(new Date(), 6)),
       },

@@ -9,7 +9,7 @@ import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {
   provider_id: string;
-  user_id?: string;
+  user_id: string;
   service:
     | 'corte'
     | 'corte e barba'
@@ -71,7 +71,7 @@ class UserCreateAppointmentService {
     }
 
     const findAppointmentLessThanWeekFromToday = await this.appointmentsRepository.findLessThanWeek(
-      provider_id,
+      user_id,
     );
 
     if (findAppointmentLessThanWeekFromToday) {

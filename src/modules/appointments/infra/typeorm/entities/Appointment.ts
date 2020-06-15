@@ -7,7 +7,9 @@ import {
   ManyToOne,
   JoinColumn,
   OneToOne,
+  AfterLoad,
 } from 'typeorm';
+import { isBefore } from 'date-fns';
 
 import User from '@modules/users/infra/typeorm/entities/User';
 import Additional from './Additional';
@@ -66,6 +68,11 @@ class Appointment {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @AfterLoad()
+  getPast() {
+    this.past = isBefore(this.date, new Date());
+  }
 }
 
 export default Appointment;

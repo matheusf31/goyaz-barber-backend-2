@@ -30,6 +30,7 @@ describe('UserCreateAppointment', () => {
     const appointment2 = await userCreateAppointment.execute({
       date: new Date(2020, 4, 9, 16),
       provider_id: 'provider2-id',
+      user_id: 'any-user',
       service: 'corte e barba',
       foreign_client_name: 'Jose Da Silva',
     });
@@ -192,17 +193,17 @@ describe('UserCreateAppointment', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to create a appointment on sunday', async () => {
+  it('should not be able to create a appointment with invalid service', async () => {
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
       return new Date(2020, 4, 11, 12).getTime();
     });
 
     await expect(
       userCreateAppointment.execute({
-        date: new Date(2020, 4, 17, 17),
+        date: new Date(2020, 4, 15, 17),
         provider_id: 'provider-id',
         user_id: 'user-id',
-        service: 'corte',
+        service: 'any for test',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
