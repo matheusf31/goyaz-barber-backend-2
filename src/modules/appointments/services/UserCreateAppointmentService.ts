@@ -66,7 +66,7 @@ class UserCreateAppointmentService {
       provider_id,
     );
 
-    if (findAppointmentInSameDate) {
+    if (findAppointmentInSameDate && !findAppointmentInSameDate.canceled_at) {
       throw new AppError('Esse horário já está ocupado.');
     }
 
