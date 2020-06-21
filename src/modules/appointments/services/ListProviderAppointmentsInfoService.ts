@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 import { getWeekOfMonth } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
 
-import IAppointmentsInfo from '../dtos/IAppointmentsInfoDTO';
+import IAppointmentsInfo, { IWeekServices } from '../dtos/IAppointmentsInfoDTO';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {
@@ -35,7 +35,30 @@ class ListProviderAppointmentsInfoService {
       appointment => appointment.concluded === true,
     );
 
-    for (let week = 1; week <= 7; week++) {
+    for (let week = 1; week <= 5; week++) {
+      const services = [
+        {
+          description: 'corte',
+          quantity: 0,
+        },
+        {
+          description: 'corte e barba',
+          quantity: 0,
+        },
+        {
+          description: 'barba',
+          quantity: 0,
+        },
+        {
+          description: 'hot towel',
+          quantity: 0,
+        },
+        {
+          description: 'corte e hot towel',
+          quantity: 0,
+        },
+      ] as IWeekServices;
+
       const profitWithoutAdditionals = concludedAppointmentsInMonth.reduce(
         (accumulator, appointment) =>
           getWeekOfMonth(appointment.date, {
@@ -72,10 +95,25 @@ class ListProviderAppointmentsInfoService {
           }) === week,
       ).length;
 
+      concludedAppointmentsInMonth.forEach(appointment => {
+        if (
+          getWeekOfMonth(appointment.date, {
+            locale: pt,
+          }) === week
+        ) {
+          const findIndex = services.findIndex(
+            service => service.description === appointment.service,
+          );
+
+          services[findIndex].quantity += 1;
+        }
+      });
+
       appointmentsInfo.weekInfo.push({
         profitWithoutAdditionals,
         profitWithAdditionals,
         customers,
+        services,
       });
     }
 

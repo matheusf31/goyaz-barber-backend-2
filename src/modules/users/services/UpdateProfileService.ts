@@ -4,6 +4,7 @@ import AppError from '@shared/errors/AppError';
 
 import User from '@modules/users/infra/typeorm/entities/User';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 
@@ -23,6 +24,9 @@ class UpdateProfileService {
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+
+    @inject('CacheProvider')
+    private cashProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -62,6 +66,10 @@ class UpdateProfileService {
       }
 
       user.password = await this.hashProvider.generateHash(password);
+    }
+
+    if (user.provider) {
+      await this.cashProvider.invalidatePrefix('providers-list');
     }
 
     return this.usersRepository.save(user);

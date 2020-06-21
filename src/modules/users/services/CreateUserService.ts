@@ -41,47 +41,6 @@ class CreateUserService {
       throw new AppError('Esse email já está em uso.');
     }
 
-    // const reg = /^(62|062)(\d{4,5}-?\d{4})$/;
-    // const reg2 = /-/;
-    // let phoneFormatted = '';
-
-    // if (!phone) {
-    //   throw new AppError('Insira o número de telefone.');
-    // }
-
-    // const match = phone.match(reg);
-    // const match2 = phone.match(reg2);
-
-    // if (match2 && phone.length > 13) {
-    //   throw new AppError('Número de telefone inválido');
-    // }
-
-    // if (!match2 && phone.length > 12) {
-    //   throw new AppError('Número de telefone inválido');
-    // }
-
-    // if (!match) {
-    //   throw new AppError('Número de telefone inválido');
-    // }
-
-    // // formatar o phone para salvar com hífen no banco de dados
-    // if (match2) {
-    //   phoneFormatted = phone;
-    // } else {
-    //   phoneFormatted = `${phone.substr(0, phone.length - 4)}-${phone.substr(
-    //     phone.length - 4,
-    //   )}`;
-    // }
-
-    // // formatar o phone para salvar com hífen no banco de dados
-    // if (match2) {
-    //   phoneFormatted = phone;
-    // } else {
-    //   phoneFormatted = `${phone.substr(0, phone.length - 4)}-${phone.substr(
-    //     phone.length - 4,
-    //   )}`;
-    // }
-
     const hashedPassword = await this.hashProvider.generateHash(password);
 
     const user = await this.usersRepository.create({

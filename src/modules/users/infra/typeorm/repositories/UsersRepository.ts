@@ -18,7 +18,10 @@ class UsersRepository implements IUsersRepository {
       where: {
         provider: false,
       },
-      select: ['id', 'name', 'avatar', 'email', 'banned'],
+      select: ['id', 'name', 'avatar', 'email', 'banned', 'phone'],
+      order: {
+        name: 'ASC',
+      },
     });
 
     return users;

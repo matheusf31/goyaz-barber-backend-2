@@ -24,6 +24,7 @@
     "prettier/prettier": "error",
     "import/no-duplicates": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-param-reassign": "off",
     "class-methods-use-this": "off",
     "no-useless-constructor": "off",
     "no-plusplus": "off",

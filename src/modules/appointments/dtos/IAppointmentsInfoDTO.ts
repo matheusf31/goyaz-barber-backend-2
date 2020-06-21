@@ -1,7 +1,13 @@
+export type IWeekServices = Array<{
+  description: string;
+  quantity: number;
+}>;
+
 type IWeekInfo = Array<{
   profitWithoutAdditionals: number;
   profitWithAdditionals: number;
   customers: number;
+  services: IWeekServices;
 }>;
 
 export default interface IAppointmentsInfo {

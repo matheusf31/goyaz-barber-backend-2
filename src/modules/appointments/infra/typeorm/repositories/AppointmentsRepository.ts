@@ -97,6 +97,9 @@ class AppointmentsRepository implements IAppointmentRepository {
         'user_id',
       ],
       relations: ['additionals', 'provider'],
+      order: {
+        date: 'ASC',
+      },
     });
 
     return appointments;
