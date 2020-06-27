@@ -9,11 +9,13 @@ import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 type IAdditionalServices = Array<{
   description: string;
   value: number;
+  quantity: number;
 }>;
 
 interface IAdditional {
   description: string;
   value: number;
+  quantity: number;
 }
 
 interface IRequest {
@@ -46,14 +48,38 @@ class UpdateAppointmentAdditionalsService {
       throw new AppError('Você não pode alterar esse agendamento.');
     }
 
+    if (additional.quantity === 0) {
+      throw new AppError('Quantidade inválida.');
+    }
+
     const additionalServices: IAdditionalServices = JSON.parse(
       appointment.additionals.services,
     );
 
-    additionalServices.push(additional);
+    const findAdditionalServiceWithSameDescription = additionalServices.findIndex(
+      service => service.description === additional.description,
+    );
+
+    if (
+      additionalServices[findAdditionalServiceWithSameDescription] &&
+      additionalServices[findAdditionalServiceWithSameDescription].value !==
+        additional.value
+    ) {
+      throw new AppError(
+        'Esse produto já foi adicionado mas com um preço diferente.',
+      );
+    }
+
+    if (findAdditionalServiceWithSameDescription !== -1) {
+      additionalServices[findAdditionalServiceWithSameDescription].quantity +=
+        additional.quantity;
+    } else {
+      additionalServices.push(additional);
+    }
 
     const total_income = additionalServices.reduce(
-      (accumulator, additionalService) => accumulator + additionalService.value,
+      (accumulator, additionalService) =>
+        accumulator + additionalService.value * additionalService.quantity,
       0,
     );
 
