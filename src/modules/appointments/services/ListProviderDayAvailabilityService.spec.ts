@@ -21,11 +21,6 @@ describe('ListProviderDayAvailability', () => {
     );
   });
 
-  /**
-   * [ ] fazer verificação se o usuário existe na hora de fazer um agendamento
-   * [ ] testar se domingo todos os horários estão indisponíveis (it should be list sunday unavailable)
-   */
-
   it('should be able to list the day availability from provider', async () => {
     const appointment1 = await fakeAppointmentsRepository.create({
       provider_id: 'one-id',
