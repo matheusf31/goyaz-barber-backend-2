@@ -39,6 +39,12 @@ class FakeUsersRepository implements IUsersRepository {
     return user;
   }
 
+  public async delete(provider_id: string): Promise<void> {
+    const findIndex = this.users.findIndex(user => user.id === provider_id);
+
+    this.users.splice(findIndex, 1);
+  }
+
   public async findAllProviders({
     except_user_id,
   }: IFindAllProvidersDTO): Promise<User[]> {
