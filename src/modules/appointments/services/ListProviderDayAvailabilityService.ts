@@ -132,6 +132,12 @@ class ListProviderDayAvailabilityService {
         appointment => format(appointment.date, 'HH:mm') === time,
       );
 
+      if (hasAppointmentInHour) {
+        hasAppointmentInHour.additionals.services = JSON.parse(
+          hasAppointmentInHour.additionals.services,
+        );
+      }
+
       /**
        * checking thirty minutes in advance if there is a service whose duration is one hour
        */
@@ -163,6 +169,7 @@ class ListProviderDayAvailabilityService {
         appointment: hasAppointmentInHour,
         past: !isAfter(searchDateTime, currentDate),
         providerBusy: hasUnavailableInHour?.is_unavailable,
+        dayBusy: hasDayBusy?.is_unavailable,
       };
     });
 
