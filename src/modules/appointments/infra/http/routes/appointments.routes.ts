@@ -118,6 +118,7 @@ appointmentsRouter.put(
       additional: Joi.object({
         description: Joi.string().required(),
         value: Joi.number().required(),
+        quantity: Joi.number().required(),
       }).required(),
     },
   }),
