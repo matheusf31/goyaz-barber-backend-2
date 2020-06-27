@@ -24,7 +24,6 @@ describe('ListProviderDayAvailability', () => {
   /**
    * [ ] fazer verificação se o usuário existe na hora de fazer um agendamento
    * [ ] testar se domingo todos os horários estão indisponíveis (it should be list sunday unavailable)
-   * [ ] arrumar testes quebrados
    */
 
   it('should be able to list the day availability from provider', async () => {
@@ -230,30 +229,35 @@ describe('ListProviderDayAvailability', () => {
           timeFormatted: '2020-05-19T09:00:00-03:00',
           available: false,
           past: true,
+          dayBusy: true,
         },
         {
           time: '10:30',
           timeFormatted: '2020-05-19T10:30:00-03:00',
           available: false,
           past: true,
+          dayBusy: true,
         },
         {
           time: '11:30',
           timeFormatted: '2020-05-19T11:30:00-03:00',
           available: false,
           past: false,
+          dayBusy: true,
         },
         {
           time: '13:30',
           timeFormatted: '2020-05-19T13:30:00-03:00',
           available: false,
           past: false,
+          dayBusy: true,
         },
         {
           time: '14:00',
           timeFormatted: '2020-05-19T14:00:00-03:00',
           available: false,
           past: false,
+          dayBusy: true,
         },
       ]),
     );
