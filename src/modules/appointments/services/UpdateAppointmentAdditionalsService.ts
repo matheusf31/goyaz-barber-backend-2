@@ -88,6 +88,10 @@ class UpdateAppointmentAdditionalsService {
 
     await this.appointmentsRepository.save(appointment);
 
+    appointment.additionals.services = JSON.parse(
+      appointment.additionals.services,
+    );
+
     return appointment;
   }
 }

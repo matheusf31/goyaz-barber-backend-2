@@ -1,9 +1,9 @@
 import AppError from '@shared/errors/AppError';
 
 import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
-import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
-import CreateUserService from './CreateUserService';
-import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
+import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import CreateUserService from '@modules/users/services/CreateUserService';
+import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
 import DeleteProviderService from './DeleteProviderService';
 
 let fakeUsersRepository: FakeUsersRepository;
@@ -24,7 +24,10 @@ describe('ShowProfile', () => {
       fakeCacheProvider,
     );
 
-    deleteProviderService = new DeleteProviderService(fakeUsersRepository);
+    deleteProviderService = new DeleteProviderService(
+      fakeUsersRepository,
+      fakeCacheProvider,
+    );
   });
 
   it('should be able to delete a provider', async () => {

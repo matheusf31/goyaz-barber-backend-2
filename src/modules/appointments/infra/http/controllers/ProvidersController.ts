@@ -4,6 +4,7 @@ import { classToClass } from 'class-transformer';
 import { container } from 'tsyringe';
 
 import ListProvidersService from '@modules/appointments/services/ListProvidersService';
+import DeleteProviderService from '@modules/appointments/services/DeleteProviderService';
 
 export default class ProvidersController {
   public async index(request: Request, response: Response): Promise<Response> {
@@ -16,5 +17,15 @@ export default class ProvidersController {
     });
 
     return response.json(classToClass(providers));
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const { provider_id } = request.params;
+
+    const deleteProvider = container.resolve(DeleteProviderService);
+
+    await deleteProvider.execute({ provider_id });
+
+    return response.status(204).json();
   }
 }

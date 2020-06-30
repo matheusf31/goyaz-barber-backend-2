@@ -13,6 +13,16 @@ providersRouter.use(ensureAuthenticated);
 
 providersRouter.get('/', providersController.index);
 
+providersRouter.delete(
+  '/:provider_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      provider_id: Joi.string().uuid().required(),
+    },
+  }),
+  providersController.delete,
+);
+
 providersRouter.get(
   '/day-availability/:provider_id',
   celebrate({

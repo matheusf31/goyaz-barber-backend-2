@@ -102,6 +102,15 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
       appointment => appointment.id === appointment_id,
     );
 
+    if (
+      findAppointment &&
+      typeof findAppointment.additionals.services === 'object'
+    ) {
+      findAppointment.additionals.services = JSON.stringify(
+        findAppointment?.additionals.services,
+      );
+    }
+
     return findAppointment;
   }
 

@@ -19,6 +19,9 @@ export default class AdditionalController {
       additional,
     });
 
+    delete appointment.canceled_at;
+    delete appointment.updated_at;
+
     return response.json(appointment);
   }
 }

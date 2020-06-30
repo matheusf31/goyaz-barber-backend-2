@@ -148,7 +148,7 @@ class AppointmentsRepository implements IAppointmentRepository {
     appointment_id: string,
   ): Promise<Appointment | undefined> {
     const appointment = await this.ormRepository.findOne(appointment_id, {
-      relations: ['additionals'],
+      relations: ['additionals', 'user'],
     });
 
     return appointment;

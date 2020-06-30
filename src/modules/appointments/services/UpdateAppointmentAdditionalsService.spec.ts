@@ -45,10 +45,6 @@ describe('UpdateAppointmentAdditionals', () => {
       },
     });
 
-    appointmentAdditionals.additionals.services = JSON.parse(
-      appointmentAdditionals.additionals.services,
-    );
-
     const additionalService = appointmentAdditionals.additionals.services[0];
 
     expect(additionalService).toHaveProperty('description');
