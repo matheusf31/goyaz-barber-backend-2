@@ -125,4 +125,17 @@ appointmentsRouter.put(
   additionalController.update,
 );
 
+appointmentsRouter.delete(
+  '/additional/:appointment_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      appointment_id: Joi.string().uuid().required(),
+    },
+    [Segments.QUERY]: {
+      description: Joi.string().required(),
+    },
+  }),
+  additionalController.delete,
+);
+
 export default appointmentsRouter;
