@@ -16,7 +16,7 @@ describe('UpdateAppointmentAdditionals', () => {
     );
   });
 
-  it('should be able to update appointment additionals', async () => {
+  it('should be able to update appointment additionals service', async () => {
     const appointment = await fakeAppointmentsRepository.create({
       provider_id: 'provider-id',
       date: new Date(2020, 4, 5, 14, 0, 0),
@@ -52,7 +52,7 @@ describe('UpdateAppointmentAdditionals', () => {
     expect(appointmentAdditionals.additionals.total_income).toBe(15);
   });
 
-  it('should not be able to update additionals from a non existing appointment', async () => {
+  it('should not be able to update additionals service from a non existing appointment', async () => {
     await expect(
       updateAppointmentAdditionals.execute({
         appointment_id: 'non-existing',
@@ -66,7 +66,7 @@ describe('UpdateAppointmentAdditionals', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to update additionals from a invalid quantity', async () => {
+  it('should not be able to update additionals service from a invalid quantity', async () => {
     const appointment = await fakeAppointmentsRepository.create({
       provider_id: 'provider-id',
       date: new Date(2020, 4, 5, 14, 0, 0),
@@ -88,7 +88,7 @@ describe('UpdateAppointmentAdditionals', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should be able to update appointment additionals from another provider', async () => {
+  it('should be able to update appointment additionals service from another provider', async () => {
     const appointment = await fakeAppointmentsRepository.create({
       provider_id: 'provider-id',
       date: new Date(2020, 4, 5, 14, 0, 0),
@@ -110,7 +110,7 @@ describe('UpdateAppointmentAdditionals', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to update appointment additionals with same description but with different values', async () => {
+  it('should not be able to update appointment additionals service with same description but with different values', async () => {
     const appointment = await fakeAppointmentsRepository.create({
       provider_id: 'provider-id',
       date: new Date(2020, 4, 5, 14, 0, 0),
