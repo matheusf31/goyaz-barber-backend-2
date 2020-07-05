@@ -10,11 +10,6 @@ import {
 
 import Appointment from './Appointment';
 
-type IService = Array<{
-  description: string;
-  value: number;
-}>;
-
 @Entity('additionals')
 class Additionals {
   @PrimaryGeneratedColumn('uuid')

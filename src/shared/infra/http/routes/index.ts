@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 
 import appointmentsRouter from '@modules/appointments/infra/http/routes/appointments.routes';
 import providersRouter from '@modules/appointments/infra/http/routes/providers.router';
@@ -17,5 +17,9 @@ routes.use('/password', passwordRouter);
 routes.use('/profile', profileRouter);
 routes.use('/providers', providersRouter);
 routes.use('/unavailables', unavailableRouter);
+
+routes.get('/', (req: Request, res: Response) => {
+  return res.json('Bem-vindo ao app da barbearia GoyazBarber!');
+});
 
 export default routes;
