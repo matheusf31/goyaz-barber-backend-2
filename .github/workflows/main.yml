@@ -49,7 +49,7 @@ jobs:
         target: "~/goyaz-barber-app/goyaz-barber-backend"
     
     # Exec yarn in Digital Ocean
-    - name: Install dependencies on Digital Ocean
+    - name: Run production scripts
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -59,26 +59,5 @@ jobs:
         script: | 
           cd ~/goyaz-barber-app/goyaz-barber-backend 
           yarn
-    
-    # Exec migrations
-    - name: Run migrations on Digital Ocean
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{ secrets.SSH_KEY }}
-        script: | 
-          cd ~/goyaz-barber-app/goyaz-barber-backend 
           ./node_modules/.bin/typeorm migration:run
-    
-    # Restart app
-    - name: Run migrations on Digital Ocean
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{ secrets.SSH_KEY }}
-        script: pm2 restart goyazbarber-app
-    
+          pm2 restart goyazbarber-app
