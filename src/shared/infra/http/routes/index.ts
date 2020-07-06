@@ -18,8 +18,8 @@ routes.use('/profile', profileRouter);
 routes.use('/providers', providersRouter);
 routes.use('/unavailables', unavailableRouter);
 
-routes.get('/', (req: Request, res: Response) => {
-  return res.json('Bem-vindo ao app da barbearia GoyazBarber!');
+routes.use('/', (req: Request, res: Response) => {
+  return res.json('Bem-vindo ao app da barbearia Goyaz Barber!');
 });
 
 export default routes;
