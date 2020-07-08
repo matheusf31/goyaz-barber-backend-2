@@ -52,7 +52,7 @@ This project was developed with the following technologies:
 
 ## :iphone: App
 
-Coming soon.
+See my another repository, where have the [mobile code](https://github.com/matheusf31/goyaz-barber-2).
 
 ## :information_source: How to run
 
