@@ -58,7 +58,7 @@ See my another repository, where have the [mobile code](https://github.com/mathe
 
 Coming soon
 
-<a href="goyazbarber.tecteu.com">Easter egg</a>
+<a href="https://goyazbarber.tecteu.com">Easter egg</a>
 
 ---
 
