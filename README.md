@@ -12,6 +12,8 @@
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/matheusf31/goyaz-barber-backend-2">
   
   <img alt="CI" src="https://github.com/matheusf31/goyaz-barber-backend-2/workflows/CI/badge.svg">
+  
+  <img alt="License" src="https://img.shields.io/github/license/matheusf31/goyaz-barber-backend-2">
 </p>
 
 <p align="center">
