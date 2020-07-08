@@ -6,7 +6,7 @@
   A barber scheduling app that allows users to schedule an appointment with his favorite barber and shows to the barber his agenda for the day.
 </h4>
 
-<!-- <p align="center">
+<p align="center">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lukemorales/gobarber-api.svg">
 
   <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/lukemorales/gobarber-api.svg">
@@ -25,7 +25,7 @@
   </a>
 
   <img alt="GitHub" src="https://img.shields.io/github/license/lukemorales/gobarber-api.svg">
-</p> -->
+</p>
 
 <p align="center">
   <a href="#crystal_ball-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -35,7 +35,7 @@
 
 This project was developed by [Me](https://www.linkedin.com/in/matheus-filipe-351106186/) with the following technologies:
 
-- [node][nodejs]
+- [nodejs](https://nodejs.org/)
 - [express](https://expressjs.com/)
 - [ts-node-dev](https://www.npmjs.com/package/ts-node-dev)
 - [docker](https://www.docker.com/docker-community)
@@ -49,22 +49,15 @@ This project was developed by [Me](https://www.linkedin.com/in/matheus-filipe-35
 - [nodemailer](https://nodemailer.com/about/)
 - [date-fns](https://date-fns.org/)
 - [dotenv](https://www.npmjs.com/package/dotenv)
-- [vscode][vc] with [eslint][vceslint]
 
 ## :iphone: Mobile
 
 Coming soon.
 
-## :rocket: How to run
+## :information_source: How to run
 
 Coming soon
 
 ---
 
 Made with ♥ by Matheus Filipe :wave: [Get in touch!](https://www.linkedin.com/in/matheus-filipe-351106186/)
-
-[nodejs]: https://nodejs.org/
-[yarn]: https://yarnpkg.com/
-[vc]: https://code.visualstudio.com/
-[vceditconfig]: https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig
-[vceslint]: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
