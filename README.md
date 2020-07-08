@@ -58,6 +58,8 @@ See my another repository, where have the [mobile code](https://github.com/mathe
 
 Coming soon
 
+<a href="goyazbarber.tecteu.com">Easter egg</a>
+
 ---
 
 Made with ♥ by Matheus Filipe :wave: [Get in touch!](https://www.linkedin.com/in/matheus-filipe-351106186/)
