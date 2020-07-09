@@ -56,7 +56,7 @@ See my another repository, where have the [mobile code](https://github.com/mathe
 
 ## :information_source: How to run
 
-Coming soon
+I maked this [step by step](https://www.notion.so/How-to-run-back-end-040876f9caaa4aad83089b7d05d5b61e) to run the backend and test its routes.
 
 ---
 
