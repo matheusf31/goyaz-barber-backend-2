@@ -52,11 +52,17 @@ This project was developed with the following technologies:
 
 ## :iphone: App
 
-See my another repository, where have the [mobile code](https://github.com/matheusf31/goyaz-barber-2), and the features of this app.
+See my another repository, builded with react native, where have the [mobile code] (https://github.com/matheusf31/goyaz-barber-2) and the features of this app.
 
 ## :information_source: How to run
 
 I maked this [step by step](https://www.notion.so/How-to-run-back-end-040876f9caaa4aad83089b7d05d5b61e) to run the backend and test its routes.
+
+## :warning: Disclaimer
+
+Why does this app have '2' in its name?
+
+Because I have [another version of this project](https://github.com/matheusf31/goyaz-barber-backend), written with <b>Javascript</b>. And I haven't finished it yet, and I decided to rewrite the entire project using Typecript.
 
 ---
 
