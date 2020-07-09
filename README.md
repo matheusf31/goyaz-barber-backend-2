@@ -52,14 +52,12 @@ This project was developed with the following technologies:
 
 ## :iphone: App
 
-See my another repository, where have the [mobile code](https://github.com/matheusf31/goyaz-barber-2).
+See my another repository, where have the [mobile code](https://github.com/matheusf31/goyaz-barber-2), and the features of this app.
 
 ## :information_source: How to run
 
 Coming soon
 
-<a href="https://goyazbarber.tecteu.com">Easter egg</a>
-
 ---
 
-Made with ♥ by Matheus Filipe :wave: [Get in touch!](https://www.linkedin.com/in/matheus-filipe-351106186/)
+Made with ♥ by Matheus Filipe :wave: [Get in touch!](https://www.linkedin.com/in/matheus-filipe-351106186/) And here is a <a href="https://goyazbarber.tecteu.com">Easter egg</a> :)
