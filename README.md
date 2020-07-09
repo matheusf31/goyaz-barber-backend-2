@@ -53,7 +53,7 @@ This project was developed with the following technologies:
 
 ## :iphone: App
 
-See my another repository, builded with react native, where have the [mobile code] (https://github.com/matheusf31/goyaz-barber-2) and the features of this app.
+See my another repository, builded with react native, where have the [mobile code](https://github.com/matheusf31/goyaz-barber-2) and the features of this app.
 
 ## :information_source: How to run
 
