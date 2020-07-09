@@ -19,7 +19,7 @@
 <p align="center">
   <a href="#crystal_ball-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#iphone-app">App</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#information_source-how-to-run">How to run</a>
+  <a href="#information_source-how-to-run">How to run</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#warning-disclaimer">Disclaimer</a>
 </p>
 
