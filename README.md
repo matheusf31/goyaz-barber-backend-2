@@ -20,6 +20,7 @@
   <a href="#crystal_ball-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#iphone-app">App</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#information_source-how-to-run">How to run</a>
+  <a href="#warning-disclaimer">Disclaimer</a>
 </p>
 
 ## :crystal_ball: Technologies
@@ -62,7 +63,7 @@ I maked this [step by step](https://www.notion.so/How-to-run-back-end-040876f9ca
 
 Why does this app have '2' in its name?
 
-Because I have [another version of this project](https://github.com/matheusf31/goyaz-barber-backend), written with <b>Javascript</b>. And I haven't finished it yet, and I decided to rewrite the entire project using Typecript.
+Because I have [another version of this project](https://github.com/matheusf31/goyaz-barber-backend), written with <b>Javascript</b>. I didn't finish it and decided to rewrite using Typescript.
 
 ---
 
