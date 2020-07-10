@@ -19,7 +19,8 @@
 <p align="center">
   <a href="#crystal_ball-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#iphone-app">App</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#information_source-how-to-run">How to run</a>
+  <a href="#information_source-how-to-run">How to run</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#warning-disclaimer">Disclaimer</a>
 </p>
 
 ## :crystal_ball: Technologies
@@ -52,11 +53,17 @@ This project was developed with the following technologies:
 
 ## :iphone: App
 
-See my another repository, where have the [mobile code](https://github.com/matheusf31/goyaz-barber-2), and the features of this app.
+See my another repository, builded with react native, where have the [mobile code](https://github.com/matheusf31/goyaz-barber-2) and the features of this app.
 
 ## :information_source: How to run
 
-Coming soon
+I maked this [step by step](https://www.notion.so/How-to-run-back-end-040876f9caaa4aad83089b7d05d5b61e) to run the backend and test its routes.
+
+## :warning: Disclaimer
+
+Why does this app have '2' in its name?
+
+Because I have [another version of this project](https://github.com/matheusf31/goyaz-barber-backend), written with <b>Javascript</b>. I didn't finish it and decided to rewrite using Typescript.
 
 ---
 
