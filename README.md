@@ -67,4 +67,4 @@ Because I have [another version of this project](https://github.com/matheusf31/g
 
 ---
 
-Made with ♥ by Matheus Filipe :wave: [Get in touch!](https://www.linkedin.com/in/matheus-filipe-351106186/) And here is a <a href="https://goyazbarber.tecteu.com">Easter egg</a> :)
+Made with ♥ by Matheus Filipe :wave: [Get in touch!](https://www.linkedin.com/in/matheus-filipe-351106186/)
