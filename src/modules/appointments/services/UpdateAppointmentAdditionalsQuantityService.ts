@@ -15,6 +15,7 @@ export type IAdditionalServices = Array<{
 interface IRequest {
   description: string;
   appointment_id: string;
+  amount: number;
 }
 
 @injectable()
@@ -27,6 +28,7 @@ class UpdateAppointmentAdditionalsService {
   public async execute({
     description,
     appointment_id,
+    amount,
   }: IRequest): Promise<Appointment> {
     const appointment = await this.appointmentsRepository.findById(
       appointment_id,
@@ -44,15 +46,26 @@ class UpdateAppointmentAdditionalsService {
       service => service.description === description,
     );
 
-    if (
-      findAdditionalServiceWithSameDescription !== -1 &&
-      additionalServices[findAdditionalServiceWithSameDescription].quantity > 1
-    ) {
-      additionalServices[
-        findAdditionalServiceWithSameDescription
-      ].quantity -= 1;
+    if (findAdditionalServiceWithSameDescription !== -1) {
+      if (
+        amount < 0 &&
+        additionalServices[findAdditionalServiceWithSameDescription]
+          .quantity === 1
+      ) {
+        additionalServices.splice(findAdditionalServiceWithSameDescription, 1);
+      } else if (
+        amount > 0 ||
+        additionalServices[findAdditionalServiceWithSameDescription].quantity >
+          1
+      ) {
+        additionalServices[
+          findAdditionalServiceWithSameDescription
+        ].quantity += amount;
+      } else {
+        throw new AppError('Houve algum erro');
+      }
     } else {
-      additionalServices.splice(findAdditionalServiceWithSameDescription, 1);
+      throw new AppError('Descrição inválida!');
     }
 
     // recalcular o total
@@ -62,7 +75,7 @@ class UpdateAppointmentAdditionalsService {
       0,
     );
 
-    appointment.additionals.total_income = total_income;
+    appointment.additionals.total_income = Number(total_income.toFixed(2));
     appointment.additionals.services = JSON.stringify(additionalServices);
 
     await this.appointmentsRepository.save(appointment);

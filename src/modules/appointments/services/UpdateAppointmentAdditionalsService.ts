@@ -83,7 +83,7 @@ class UpdateAppointmentAdditionalsService {
       0,
     );
 
-    appointment.additionals.total_income = total_income;
+    appointment.additionals.total_income = Number(total_income.toFixed(2));
     appointment.additionals.services = JSON.stringify(additionalServices);
 
     await this.appointmentsRepository.save(appointment);

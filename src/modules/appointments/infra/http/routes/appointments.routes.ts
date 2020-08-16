@@ -6,6 +6,7 @@ import ProviderAppointmentController from '../controllers/ProviderAppointmentCon
 import ConcludedAppointmentController from '../controllers/ConcludedAppointmentController';
 import UserAppointmentsController from '../controllers/UserAppointmentsController';
 import AppointmentsInfoController from '../controllers/AppointmentsInfoController';
+import AdditionalsController from '../controllers/AdditionalsController';
 import AdditionalController from '../controllers/AdditionalController';
 
 const appointmentsRouter = Router();
@@ -14,6 +15,7 @@ const providerAppointmentController = new ProviderAppointmentController();
 const concludedAppointmentController = new ConcludedAppointmentController();
 const userAppointmentsController = new UserAppointmentsController();
 const appointmentsInfoController = new AppointmentsInfoController();
+const additionalsController = new AdditionalsController();
 const additionalController = new AdditionalController();
 
 appointmentsRouter.use(ensureAuthenticated);
@@ -122,20 +124,21 @@ appointmentsRouter.put(
       }).required(),
     },
   }),
-  additionalController.update,
+  additionalsController.update,
 );
 
-appointmentsRouter.delete(
+appointmentsRouter.put(
   '/additional/:appointment_id',
   celebrate({
     [Segments.PARAMS]: {
       appointment_id: Joi.string().uuid().required(),
     },
-    [Segments.QUERY]: {
+    [Segments.BODY]: {
       description: Joi.string().required(),
+      amount: Joi.number().required(),
     },
   }),
-  additionalController.delete,
+  additionalController.update,
 );
 
 export default appointmentsRouter;

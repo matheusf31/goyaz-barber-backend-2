@@ -22,6 +22,8 @@ export default class AppointmentsController {
       foreign_client_name,
     });
 
+    request.io.emit('scheduling-update');
+
     return response.json(appointment);
   }
 
@@ -33,6 +35,8 @@ export default class AppointmentsController {
     );
 
     await providerDeleteAppointment.execute(appointment_id);
+
+    request.io.emit('scheduling-update');
 
     return response.status(204).json();
   }

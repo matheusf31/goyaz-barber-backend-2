@@ -37,6 +37,8 @@ export default class AppointmentsController {
       date,
     });
 
+    request.io.emit('scheduling-update');
+
     return response.json(appointment);
   }
 
@@ -52,6 +54,8 @@ export default class AppointmentsController {
       logged_user_id,
       appointment_id,
     });
+
+    request.io.emit('scheduling-update');
 
     return response.json(appointment);
   }

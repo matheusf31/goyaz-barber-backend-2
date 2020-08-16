@@ -45,7 +45,7 @@ class ListProviderDayAvailabilityService {
     month,
     year,
   }: IRequest): Promise<IResponse> {
-    const appointments = await this.appointmentsRepository.findAllInDayFromProvider(
+    const appointmentsPromise = this.appointmentsRepository.findAllInDayFromProvider(
       {
         provider_id,
         day,
@@ -54,7 +54,7 @@ class ListProviderDayAvailabilityService {
       },
     );
 
-    const unavailableHours = await this.unavailablesRepository.findAllInDayUnavailable(
+    const unavailableHoursPromise = this.unavailablesRepository.findAllInDayUnavailable(
       {
         provider_id,
         day,
@@ -62,6 +62,11 @@ class ListProviderDayAvailabilityService {
         year,
       },
     );
+
+    const [appointments, unavailableHours] = await Promise.all([
+      appointmentsPromise,
+      unavailableHoursPromise,
+    ]);
 
     const schedule = [];
 

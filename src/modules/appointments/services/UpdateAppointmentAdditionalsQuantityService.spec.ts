@@ -3,11 +3,11 @@ import AppError from '@shared/errors/AppError';
 import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository';
 
 import UpdateAppointmentAdditionalsService from './UpdateAppointmentAdditionalsService';
-import DeleteAppointmentAdditionalsService from './DeleteAppointmentAdditionalsService';
+import UpdateAppointmentAdditionalsQuantityService from './UpdateAppointmentAdditionalsQuantityService';
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
 let updateAppointmentAdditionals: UpdateAppointmentAdditionalsService;
-let deleteAppointmentAdditionals: DeleteAppointmentAdditionalsService;
+let updateAppointmentAdditionalsQuantity: UpdateAppointmentAdditionalsQuantityService;
 
 interface IService {
   description: string;
@@ -23,7 +23,7 @@ describe('UpdateAppointmentAdditionals', () => {
       fakeAppointmentsRepository,
     );
 
-    deleteAppointmentAdditionals = new DeleteAppointmentAdditionalsService(
+    updateAppointmentAdditionalsQuantity = new UpdateAppointmentAdditionalsQuantityService(
       fakeAppointmentsRepository,
     );
   });
@@ -47,9 +47,10 @@ describe('UpdateAppointmentAdditionals', () => {
       },
     });
 
-    await deleteAppointmentAdditionals.execute({
+    await updateAppointmentAdditionalsQuantity.execute({
       appointment_id: appointment.id,
       description: 'cerveja',
+      amount: -1,
     });
 
     expect(appointmentAdditionals.additionals.total_income).toBe(0);
@@ -85,9 +86,10 @@ describe('UpdateAppointmentAdditionals', () => {
       },
     });
 
-    await deleteAppointmentAdditionals.execute({
+    await updateAppointmentAdditionalsQuantity.execute({
       appointment_id: appointment.id,
       description: 'cerveja',
+      amount: -1,
     });
 
     const additionalService = (appointmentAdditionals.additionals
@@ -99,9 +101,66 @@ describe('UpdateAppointmentAdditionals', () => {
 
   it('should not be able to delete additionals service from a non existing appointment', async () => {
     await expect(
-      deleteAppointmentAdditionals.execute({
+      updateAppointmentAdditionalsQuantity.execute({
         appointment_id: 'non-existing',
         description: 'cerveja',
+        amount: -1,
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to delete additionals service from a non existing description', async () => {
+    const appointment = await fakeAppointmentsRepository.create({
+      provider_id: 'provider-id',
+      date: new Date(2020, 4, 5, 14, 0, 0),
+      user_id: 'any',
+      service: 'corte',
+      price: 25,
+    });
+
+    const appointmentAdditionals = await updateAppointmentAdditionals.execute({
+      appointment_id: appointment.id,
+      provider_id: 'provider-id',
+      additional: {
+        description: 'cerveja',
+        value: 7.5,
+        quantity: 1,
+      },
+    });
+
+    await expect(
+      updateAppointmentAdditionalsQuantity.execute({
+        appointment_id: appointmentAdditionals.id,
+        description: 'cervejaaa',
+        amount: -1,
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to send invalid amount', async () => {
+    const appointment = await fakeAppointmentsRepository.create({
+      provider_id: 'provider-id',
+      date: new Date(2020, 4, 5, 14, 0, 0),
+      user_id: 'any',
+      service: 'corte',
+      price: 25,
+    });
+
+    const appointmentAdditionals = await updateAppointmentAdditionals.execute({
+      appointment_id: appointment.id,
+      provider_id: 'provider-id',
+      additional: {
+        description: 'cerveja',
+        value: 7.5,
+        quantity: -1,
+      },
+    });
+
+    await expect(
+      updateAppointmentAdditionalsQuantity.execute({
+        appointment_id: appointmentAdditionals.id,
+        description: 'cerveja',
+        amount: 0,
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
