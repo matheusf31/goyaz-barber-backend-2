@@ -21,6 +21,7 @@
   },
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
+    "import/prefer-default-export": "off",
     "prettier/prettier": "error",
     "import/no-duplicates": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
