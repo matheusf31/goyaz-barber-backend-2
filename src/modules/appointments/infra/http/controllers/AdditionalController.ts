@@ -2,41 +2,23 @@ import { Request, Response } from 'express';
 
 import { container } from 'tsyringe';
 
-import UpdateAppointmentAdditionalsService from '@modules/appointments/services/UpdateAppointmentAdditionalsService';
-import DeleteAppointmentAdditionalsService from '@modules/appointments/services/DeleteAppointmentAdditionalsService';
+import UpdateAppointmentAdditionalsQuantityService from '@modules/appointments/services/UpdateAppointmentAdditionalsQuantityService';
 
-export default class AdditionalController {
+export default class AdditionalsController {
   public async update(request: Request, response: Response): Promise<Response> {
-    const provider_id = request.user.id;
-    const { appointment_id, additional } = request.body;
-
-    const updateAppointmentAdditionals = container.resolve(
-      UpdateAppointmentAdditionalsService,
-    );
-
-    const appointment = await updateAppointmentAdditionals.execute({
-      provider_id,
-      appointment_id,
-      additional,
-    });
-
-    delete appointment.canceled_at;
-    delete appointment.updated_at;
-
-    return response.json(appointment);
-  }
-
-  public async delete(request: Request, response: Response): Promise<Response> {
     const { appointment_id } = request.params;
-    const { description } = request.query;
+    const { description, amount } = request.body;
 
-    const deleteAppointmentAdditionals = container.resolve(
-      DeleteAppointmentAdditionalsService,
+    const parsedAmount = Number(amount);
+
+    const updateAppointmentAdditionalsQuantity = container.resolve(
+      UpdateAppointmentAdditionalsQuantityService,
     );
 
-    const appointment = await deleteAppointmentAdditionals.execute({
+    const appointment = await updateAppointmentAdditionalsQuantity.execute({
       appointment_id,
       description: String(description),
+      amount: parsedAmount,
     });
 
     delete appointment.canceled_at;
