@@ -5,16 +5,33 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import { errors } from 'celebrate';
 import 'express-async-errors';
+import socketio from 'socket.io';
+import http from 'http';
 
 import uploadConfig from '@config/upload';
 import AppError from '@shared/errors/AppError';
+
 import rateLimiter from './middlewares/rateLimiter';
+import socketMiddleware from './middlewares/socketMiddleware';
+
 import routes from './routes';
 
 import '@shared/infra/typeorm';
 import '@shared/container';
 
 const app = express();
+const server = http.createServer(app);
+const io = socketio.listen(server);
+
+io.on('connection', socket => {
+  console.log('a user connected :D');
+
+  socket.on('disconnect', () => {
+    console.log('a user disconnected D:');
+  });
+});
+
+app.use(socketMiddleware);
 
 app.use(rateLimiter);
 app.use(cors());
@@ -40,6 +57,8 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 
-app.listen(3333, () => {
+server.listen(3333, () => {
   console.log('🚀 Server started on port 3333!');
 });
+
+export { io };

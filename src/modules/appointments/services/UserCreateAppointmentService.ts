@@ -70,15 +70,15 @@ class UserCreateAppointmentService {
       throw new AppError('Esse horário já está ocupado.');
     }
 
-    const findAppointmentLessThanWeekFromToday = await this.appointmentsRepository.findLessThanWeek(
-      user_id,
-    );
+    // const findAppointmentLessThanWeekFromToday = await this.appointmentsRepository.findLessThanWeek(
+    //   user_id,
+    // );
 
-    if (findAppointmentLessThanWeekFromToday) {
-      throw new AppError(
-        'Você já possui um agendamento em menos de uma semana.',
-      );
-    }
+    // if (findAppointmentLessThanWeekFromToday) {
+    //   throw new AppError(
+    //     'Você já possui um agendamento em menos de uma semana.',
+    //   );
+    // }
 
     let price: number;
 
