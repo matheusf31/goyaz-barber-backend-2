@@ -15,6 +15,9 @@ import IUserTokensRepository from '@modules/users/repositories/IUserTokensReposi
 import UnavailablesRepository from '@modules/unavailables/infra/typeorm/repositories/UnavailablesRepository';
 import IUnavailablesRepository from '@modules/unavailables/repositories/IUnavailablesRepository';
 
+import NotificationsRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository';
+import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+
 container.registerSingleton<IAppointmentsRepository>(
   'AppointmentsRepository',
   AppointmentsRepository,
@@ -33,4 +36,9 @@ container.registerSingleton<IUserTokensRepository>(
 container.registerSingleton<IUnavailablesRepository>(
   'UnavailablesRepository',
   UnavailablesRepository,
+);
+
+container.registerSingleton<INotificationsRepository>(
+  'NotificationsRepository',
+  NotificationsRepository,
 );
