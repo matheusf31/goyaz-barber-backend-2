@@ -1,11 +1,21 @@
 import { injectable, inject } from 'tsyringe';
-import { subMinutes, isBefore } from 'date-fns';
+import {
+  differenceInDays,
+  formatRelative,
+  format,
+  subMinutes,
+  isBefore,
+} from 'date-fns';
+import { ptBR, enUS } from 'date-fns/locale';
+import { HTTPError } from 'onesignal-node';
 
 import AppError from '@shared/errors/AppError';
+import { client } from '@shared/container/providers/OneSignal';
+
+import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
-
-import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface IRequest {
   appointment_id: string;
@@ -17,6 +27,9 @@ class UserCancelAppointmentService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('NotificationsRepository')
+    private notificationsRepository: INotificationsRepository,
   ) {}
 
   public async execute({
@@ -47,6 +60,61 @@ class UserCancelAppointmentService {
       throw new AppError(
         'Você não pode mais desmarcar o agendamento, ligue para o barbeiro.',
       );
+    }
+
+    const providerDeviceIds = await this.notificationsRepository.findDevicesById(
+      appointment.provider_id,
+    );
+
+    if (providerDeviceIds.length === 0) {
+      throw new AppError(
+        'Esse prestador de service não está com o celular cadastrado.',
+      );
+    }
+
+    let formattedDateBR = '';
+    let formattedDateEN = '';
+
+    if (differenceInDays(appointment.date, new Date()) >= 6) {
+      formattedDateBR = format(appointment.date, 'dd/MM/RR - HH:mm', {
+        locale: ptBR,
+      });
+
+      formattedDateEN = format(appointment.date, 'dd/MM/RR - HH:mm', {
+        locale: enUS,
+      });
+    } else {
+      formattedDateBR = formatRelative(appointment.date, new Date(), {
+        locale: ptBR,
+      });
+
+      formattedDateEN = formatRelative(appointment.date, new Date(), {
+        locale: enUS,
+      });
+    }
+
+    const notification = {
+      contents: {
+        en: `Date: ${formattedDateEN}`,
+        pt: `Data: ${formattedDateBR}`,
+      },
+      headings: {
+        en: 'You have a new appointment!',
+        pt: 'Você tem um novo agendamento!',
+      },
+      include_player_ids: providerDeviceIds,
+    };
+
+    try {
+      const response = await client.createNotification(notification);
+
+      console.log(response.body);
+    } catch (e) {
+      if (e instanceof HTTPError) {
+        // When status code of HTTP response is not 2xx, HTTPError is thrown.
+        console.log(e.statusCode);
+        console.log(e.body);
+      }
     }
 
     appointment.canceled_at = new Date(Date.now());
