@@ -46,7 +46,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         key: ${{ secrets.SSH_KEY }}
         source: ".,!node_modules"
-        target: "~/goyaz-barber-app/goyaz-barber-backend"
+        target: "~/app/goyaz-barber-backend"
     
     # Exec yarn in Digital Ocean
     - name: Run production scripts
@@ -57,7 +57,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         key: ${{ secrets.SSH_KEY }}
         script: | 
-          cd ~/goyaz-barber-app/goyaz-barber-backend 
+          cd ~/app/goyaz-barber-backend 
           yarn
           ./node_modules/.bin/typeorm migration:run
-          pm2 restart goyazbarber-app
+          pm2 restart goyaz-barber-api
