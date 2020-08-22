@@ -17,7 +17,15 @@ const usersController = new UsersController();
 const banController = new BanController();
 const userAvatarController = new UserAvatarController();
 
-usersRouter.get('/', usersController.index);
+usersRouter.get(
+  '/:provider_id',
+  celebrate({
+    [Segments.BODY]: {
+      provider_id: Joi.string().uuid(),
+    },
+  }),
+  usersController.index,
+);
 
 usersRouter.post(
   '/',
