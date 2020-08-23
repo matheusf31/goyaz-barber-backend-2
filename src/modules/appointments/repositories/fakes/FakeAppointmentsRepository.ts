@@ -1,12 +1,5 @@
 import { uuid } from 'uuidv4';
-import {
-  isEqual,
-  getMonth,
-  getYear,
-  getDate,
-  addDays,
-  isBefore,
-} from 'date-fns';
+import { isEqual, getMonth, getYear, getDate, isBefore } from 'date-fns';
 
 import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
@@ -17,6 +10,19 @@ import Appointment from '@modules/appointments/infra/typeorm/entities/Appointmen
 
 class FakeAppointmentsRepository implements IAppointmentRepository {
   private appointments: Appointment[] = [];
+
+  public async findAllByProviderId(
+    provider_id: string,
+  ): Promise<Appointment[]> {
+    const appointments = await this.appointments.filter(
+      appointment =>
+        appointment.provider_id === provider_id &&
+        appointment.canceled_at === null &&
+        appointment.concluded === true,
+    );
+
+    return appointments;
+  }
 
   public async findAllInDayFromProvider({
     provider_id,
@@ -80,15 +86,17 @@ class FakeAppointmentsRepository implements IAppointmentRepository {
     return findAppointment;
   }
 
-  public async findLessThanWeek(
+  public async findExistentUserAppointment(
     user_id: string,
   ): Promise<Appointment | undefined> {
     const findAppointment = this.appointments.find(appointment => {
-      const compareDate = addDays(new Date(Date.now()), 6);
+      const compareDate = new Date(Date.now());
 
       return (
-        isBefore(appointment.date, compareDate) &&
-        appointment.user_id === user_id
+        !isBefore(appointment.date, compareDate) &&
+        appointment.user_id === user_id &&
+        appointment.concluded === false &&
+        appointment.canceled_at === null
       );
     });
 
