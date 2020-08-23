@@ -9,7 +9,6 @@ import IFindAllUserAppointmentsInMonthDTO from '@modules/appointments/dtos/IFind
 import Appointment from '../entities/Appointment';
 import Additional from '../entities/Additional';
 
-// TypeORM Query Operators
 const MoreThanDate = (date: Date) =>
   MoreThan(format(date, 'yyyy-MM-dd kk:mm:ss.SSS'));
 
