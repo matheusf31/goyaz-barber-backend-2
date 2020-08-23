@@ -31,19 +31,72 @@ describe('ShowProfile', () => {
   });
 
   it('should be able to delete a provider', async () => {
-    const user = await createUser.execute({
+    const provider = await createUser.execute({
       name: 'John',
       email: 'johndoe@gmail.com',
       phone: '994622353',
       password: '123123',
+      provider: true,
+      admin: true,
     });
 
-    await deleteProviderService.execute({ provider_id: user.id });
+    const logged_provider = await createUser.execute({
+      name: 'John2',
+      email: 'johntre@gmail.com',
+      phone: '994622353',
+      password: '123123',
+      provider: true,
+      admin: true,
+    });
+
+    await deleteProviderService.execute({
+      logged_provider: logged_provider.id,
+      provider_id: provider.id,
+    });
   });
 
   it('should not be able to delete a non existing provider', async () => {
+    const logged_provider = await createUser.execute({
+      name: 'John',
+      email: 'johntre@gmail.com',
+      phone: '994622353',
+      password: '123123',
+      provider: true,
+      admin: true,
+    });
+
     await expect(
-      deleteProviderService.execute({ provider_id: 'non-existing-id ' }),
+      deleteProviderService.execute({
+        logged_provider: logged_provider.id,
+        provider_id: 'non-existing-id',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to delete a provider with non admin provider', async () => {
+    const provider = await createUser.execute({
+      name: 'John',
+      email: 'johndoe@gmail.com',
+      phone: '994622353',
+      password: '123123',
+      provider: true,
+      admin: true,
+    });
+
+    const logged_provider = await createUser.execute({
+      name: 'John2',
+      email: 'johntre@gmail.com',
+      phone: '994622353',
+      password: '123123',
+      provider: true,
+      admin: false,
+    });
+
+    await expect(
+      deleteProviderService.execute({
+        logged_provider: logged_provider.id,
+        provider_id: provider.id,
+      }),
     ).rejects.toBeInstanceOf(AppError);
   });
 });

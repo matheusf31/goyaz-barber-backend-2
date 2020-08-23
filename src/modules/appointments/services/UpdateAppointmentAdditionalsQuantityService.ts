@@ -68,7 +68,7 @@ class UpdateAppointmentAdditionalsService {
       throw new AppError('Descrição inválida!');
     }
 
-    // recalcular o total
+    // recalculate the total
     const total_income = additionalServices.reduce(
       (accumulator, additionalService) =>
         accumulator + additionalService.value * additionalService.quantity,

@@ -1,17 +1,21 @@
 import AppError from '@shared/errors/AppError';
 
+import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
 import UserCreateAppointmentService from './UserCreateAppointmentService';
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
+let fakeNotificationsRepository: FakeNotificationsRepository;
 let userCreateAppointment: UserCreateAppointmentService;
 
 describe('UserCreateAppointment', () => {
   beforeEach(() => {
+    fakeNotificationsRepository = new FakeNotificationsRepository();
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
 
     userCreateAppointment = new UserCreateAppointmentService(
       fakeAppointmentsRepository,
+      fakeNotificationsRepository,
     );
   });
 
@@ -22,14 +26,14 @@ describe('UserCreateAppointment', () => {
 
     const appointment = await userCreateAppointment.execute({
       date: new Date(2020, 4, 9, 15),
-      provider_id: '123123',
+      provider_id: '123456',
       user_id: 'logged-user',
       service: 'corte',
     });
 
     const appointment2 = await userCreateAppointment.execute({
       date: new Date(2020, 4, 9, 16),
-      provider_id: 'provider2-id',
+      provider_id: '123456',
       user_id: 'any-user',
       service: 'corte e barba',
       foreign_client_name: 'Jose Da Silva',
@@ -37,28 +41,28 @@ describe('UserCreateAppointment', () => {
 
     await userCreateAppointment.execute({
       date: new Date(2020, 4, 9, 9),
-      provider_id: 'provider3-id',
+      provider_id: '123456',
       user_id: 'user3-id',
       service: 'barba',
     });
 
     await userCreateAppointment.execute({
       date: new Date(2020, 4, 9, 10, 30),
-      provider_id: 'provider4-id',
+      provider_id: '123456',
       user_id: 'user4-id',
       service: 'corte e hot towel',
     });
 
     await userCreateAppointment.execute({
       date: new Date(2020, 4, 9, 11, 30),
-      provider_id: 'provider5-id',
+      provider_id: '123456',
       user_id: 'user5-id',
       service: 'hot towel',
     });
 
     expect(appointment).toHaveProperty('id');
     expect(appointment).toHaveProperty('additionals');
-    expect(appointment.provider_id).toBe('123123');
+    expect(appointment.provider_id).toBe('123456');
     expect(appointment.user_id).toBe('logged-user');
     expect(appointment.service).toBe('corte');
     expect(appointment.price).toBe(25);
@@ -76,7 +80,7 @@ describe('UserCreateAppointment', () => {
 
     await userCreateAppointment.execute({
       date: appointmentDate,
-      provider_id: '123123',
+      provider_id: '123456',
       user_id: 'logged-user',
       service: 'corte e barba',
     });
@@ -84,7 +88,7 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: appointmentDate,
-        provider_id: '123123',
+        provider_id: '123456',
         user_id: 'logged-user',
         service: 'barba',
       }),
@@ -99,7 +103,7 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: new Date(2020, 4, 10, 11),
-        provider_id: 'provider-id',
+        provider_id: '123456',
         user_id: 'user-id',
         service: 'hot towel',
       }),
@@ -129,7 +133,7 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: new Date(2020, 4, 16, 8),
-        provider_id: 'provider-id',
+        provider_id: '123456',
         user_id: 'user-id',
         service: 'hot towel',
       }),
@@ -138,7 +142,7 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: new Date(2020, 4, 16, 18),
-        provider_id: 'provider-id',
+        provider_id: '123456',
         user_id: 'user-id',
         service: 'corte',
       }),
@@ -153,7 +157,7 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: new Date(2020, 4, 11, 8),
-        provider_id: 'provider-id',
+        provider_id: '123456',
         user_id: 'user-id',
         service: 'corte',
       }),
@@ -162,7 +166,7 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: new Date(2020, 4, 11, 20),
-        provider_id: 'provider-id',
+        provider_id: '123456',
         user_id: 'user-id',
         service: 'corte',
       }),
@@ -177,7 +181,7 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: new Date(2020, 4, 10, 14),
-        provider_id: 'provider-id',
+        provider_id: '123456',
         user_id: 'user-id',
         service: 'corte',
       }),
@@ -186,7 +190,7 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: new Date(2020, 4, 10, 17),
-        provider_id: 'provider-id',
+        provider_id: '123456',
         user_id: 'user-id',
         service: 'corte',
       }),
@@ -201,14 +205,14 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: new Date(2020, 4, 15, 17),
-        provider_id: 'provider-id',
+        provider_id: '123456',
         user_id: 'user-id',
         service: 'any for test',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to create a schedule if another one already exists in less than a week', async () => {
+  it('should not be able to create a schedule if another one already exists', async () => {
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date(2020, 4, 11, 9).getTime();
     });
@@ -217,7 +221,7 @@ describe('UserCreateAppointment', () => {
 
     await userCreateAppointment.execute({
       date: appointmentDate,
-      provider_id: 'provider-id',
+      provider_id: '123456',
       user_id: 'user-id',
       service: 'corte e barba',
     });
@@ -225,9 +229,24 @@ describe('UserCreateAppointment', () => {
     await expect(
       userCreateAppointment.execute({
         date: new Date(2020, 4, 15, 14),
-        provider_id: 'provider-id',
+        provider_id: '123456',
         user_id: 'user-id',
         service: 'corte e barba',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should note be able to create a appointment with provider without device id', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2020, 4, 9, 8).getTime();
+    });
+
+    await expect(
+      userCreateAppointment.execute({
+        date: new Date(2020, 4, 9, 15),
+        provider_id: '123123',
+        user_id: 'logged-user',
+        service: 'corte',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
