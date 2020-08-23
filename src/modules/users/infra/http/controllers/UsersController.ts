@@ -7,7 +7,7 @@ import ListUsersService from '@modules/users/services/ListUsersService';
 
 export default class UsersController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const { provider_id } = request.params;
+    const provider_id = request.user.id;
 
     const listUsers = container.resolve(ListUsersService);
 

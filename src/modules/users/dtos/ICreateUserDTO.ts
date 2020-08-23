@@ -4,4 +4,5 @@ export default interface ICreateUserDTO {
   phone: string;
   password: string;
   provider?: boolean;
+  admin?: boolean;
 }

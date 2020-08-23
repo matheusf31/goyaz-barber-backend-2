@@ -17,15 +17,7 @@ const usersController = new UsersController();
 const banController = new BanController();
 const userAvatarController = new UserAvatarController();
 
-usersRouter.get(
-  '/:provider_id',
-  celebrate({
-    [Segments.BODY]: {
-      provider_id: Joi.string().uuid(),
-    },
-  }),
-  usersController.index,
-);
+usersRouter.get('/', ensureAuthenticated, usersController.index);
 
 usersRouter.post(
   '/',
@@ -51,6 +43,7 @@ usersRouter.patch(
       banned: Joi.boolean().required(),
     },
   }),
+  ensureAuthenticated,
   banController.update,
 );
 
