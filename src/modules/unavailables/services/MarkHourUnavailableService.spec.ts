@@ -1,5 +1,3 @@
-// import AppError from '@shared/errors/AppError';
-
 import FakeUnavailablesRepository from '../repositories/fakes/FakeUnavailablesRepository';
 import MarkHourUnavailableService from './MarkHourUnavailableService';
 
@@ -32,10 +30,6 @@ describe('MarkHourUnavailable', () => {
   });
 
   it('should not be able to mark an hour unavailable at the same time as another', async () => {
-    // jest.spyOn(Date, 'now').mockImplementation(() => {
-    //   return new Date(2020, 4, 11, 14).getTime();
-    // });
-
     const date = new Date(2020, 4, 11, 16);
 
     await markHourUnavailable.execute({

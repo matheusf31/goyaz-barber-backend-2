@@ -85,13 +85,18 @@ class UserCreateAppointmentService {
       throw new AppError('Esse horário já está ocupado.');
     }
 
-    const findAppointmentLessThanWeekFromToday = await this.appointmentsRepository.findLessThanWeek(
+    const findAppointment = await this.appointmentsRepository.findExistentUserAppointment(
       user_id,
     );
 
-    if (findAppointmentLessThanWeekFromToday) {
+    if (findAppointment) {
+      const dateFormatted = format(
+        findAppointment.date,
+        "dd/MM 'às' HH:mm 'horas'",
+      );
+
       throw new AppError(
-        'Você já possui um agendamento em menos de uma semana.',
+        `Você já possui um agendamento para o dia ${dateFormatted}.`,
       );
     }
 
@@ -175,14 +180,14 @@ class UserCreateAppointmentService {
     };
 
     try {
-      const response = await client.createNotification(notification);
-
-      console.log(response.body);
+      // const response = await client.createNotification(notification);
+      await client.createNotification(notification);
+      // console.log(response.body);
     } catch (e) {
       if (e instanceof HTTPError) {
         // When status code of HTTP response is not 2xx, HTTPError is thrown.
-        console.log(e.statusCode);
-        console.log(e.body);
+        // console.log(e.statusCode);
+        // console.log(e.body);
       }
     }
 

@@ -6,6 +6,7 @@ import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICa
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 interface IRequest {
+  logged_provider: string;
   provider_id: string;
 }
 
@@ -19,17 +20,28 @@ class ShowProfileService {
     private cashProvider: ICacheProvider,
   ) {}
 
-  public async execute({ provider_id }: IRequest): Promise<void> {
+  public async execute({
+    logged_provider,
+    provider_id,
+  }: IRequest): Promise<void> {
     const provider = await this.usersRepository.findById(provider_id);
+    const loggedProvider = await this.usersRepository.findById(logged_provider);
+
+    if (!loggedProvider || !loggedProvider.admin) {
+      throw new AppError(
+        'Você não tem permissão para deletar um prestador de serviços.',
+        401,
+      );
+    }
 
     if (!provider) {
       throw new AppError('Usuário não existe.');
     }
 
-    // fazer as duas ao mesmo tempo
-    await this.usersRepository.delete(provider_id);
-
-    await this.cashProvider.invalidatePrefix('providers-list');
+    await Promise.all([
+      this.usersRepository.delete(provider_id),
+      this.cashProvider.invalidatePrefix('providers-list'),
+    ]);
   }
 }
 

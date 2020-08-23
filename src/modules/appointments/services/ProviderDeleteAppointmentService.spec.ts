@@ -1,19 +1,23 @@
 import AppError from '@shared/errors/AppError';
 
+import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
 import UserCreateAppointmentService from './UserCreateAppointmentService';
 import ProviderDeleteAppointmentService from './ProviderDeleteAppointmentService';
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
+let fakeNotificationsRepository: FakeNotificationsRepository;
 let userCreateAppointment: UserCreateAppointmentService;
 let providerDeleteAppointmentService: ProviderDeleteAppointmentService;
 
 describe('ProviderDeleteAppointment', () => {
   beforeEach(() => {
+    fakeNotificationsRepository = new FakeNotificationsRepository();
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
 
     userCreateAppointment = new UserCreateAppointmentService(
       fakeAppointmentsRepository,
+      fakeNotificationsRepository,
     );
 
     providerDeleteAppointmentService = new ProviderDeleteAppointmentService(
@@ -28,7 +32,7 @@ describe('ProviderDeleteAppointment', () => {
 
     const appointment = await userCreateAppointment.execute({
       date: new Date(2020, 4, 13, 15),
-      provider_id: '123123',
+      provider_id: '123456',
       user_id: 'logged-user',
       service: 'corte',
     });

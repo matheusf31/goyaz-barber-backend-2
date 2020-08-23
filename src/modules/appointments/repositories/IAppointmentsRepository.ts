@@ -11,7 +11,10 @@ export default interface AppointmentsRepository {
   delete(appointment_id: string): Promise<void>;
   findById(appointment_id: string): Promise<Appointment | undefined>;
   findByDate(date: Date, provider_id: string): Promise<Appointment | undefined>;
-  findLessThanWeek(user_id: string): Promise<Appointment | undefined>;
+  findExistentUserAppointment(
+    user_id: string,
+  ): Promise<Appointment | undefined>;
+  findAllByProviderId(provider_id: string): Promise<Appointment[]>;
   findAllInDayFromProvider(
     data: IFindAllInDayFromProviderDTO,
   ): Promise<Appointment[]>;

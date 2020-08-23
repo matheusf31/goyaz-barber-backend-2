@@ -17,7 +17,7 @@ const usersController = new UsersController();
 const banController = new BanController();
 const userAvatarController = new UserAvatarController();
 
-usersRouter.get('/', usersController.index);
+usersRouter.get('/', ensureAuthenticated, usersController.index);
 
 usersRouter.post(
   '/',
@@ -43,6 +43,7 @@ usersRouter.patch(
       banned: Joi.boolean().required(),
     },
   }),
+  ensureAuthenticated,
   banController.update,
 );
 

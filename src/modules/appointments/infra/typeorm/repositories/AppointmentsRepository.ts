@@ -1,5 +1,5 @@
-import { getRepository, Repository, Between } from 'typeorm';
-import { endOfDay, endOfMonth, addDays } from 'date-fns';
+import { getRepository, Repository, Between, MoreThan } from 'typeorm';
+import { endOfDay, endOfMonth, format } from 'date-fns';
 
 import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
@@ -9,11 +9,29 @@ import IFindAllUserAppointmentsInMonthDTO from '@modules/appointments/dtos/IFind
 import Appointment from '../entities/Appointment';
 import Additional from '../entities/Additional';
 
+const MoreThanDate = (date: Date) =>
+  MoreThan(format(date, 'yyyy-MM-dd kk:mm:ss.SSS'));
+
 class AppointmentsRepository implements IAppointmentRepository {
   private ormRepository: Repository<Appointment>;
 
   constructor() {
     this.ormRepository = getRepository(Appointment);
+  }
+
+  public async findAllByProviderId(
+    provider_id: string,
+  ): Promise<Appointment[]> {
+    const appointments = await this.ormRepository.find({
+      where: {
+        provider_id,
+        canceled_at: null,
+        concluded: true,
+      },
+      relations: ['user'],
+    });
+
+    return appointments;
   }
 
   public async findAllInDayFromProvider({
@@ -119,26 +137,18 @@ class AppointmentsRepository implements IAppointmentRepository {
     return findAppointment;
   }
 
-  public async findLessThanWeek(
+  public async findExistentUserAppointment(
     user_id: string,
   ): Promise<Appointment | undefined> {
     const appointment = await this.ormRepository.findOne({
       where: {
         user_id,
         canceled_at: null,
-        date: Between(new Date(), addDays(new Date(), 6)),
+        concluded: false,
+        date: MoreThanDate(new Date()),
       },
-      select: [
-        'id',
-        'concluded',
-        'date',
-        'foreign_client_name',
-        'service',
-        'price',
-        'canceled_at',
-        'user_id',
-      ],
-      relations: ['additionals', 'user'],
+      select: ['id', 'concluded', 'canceled_at', 'user_id', 'date'],
+      relations: ['user'],
     });
 
     return appointment;
