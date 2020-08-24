@@ -30,6 +30,7 @@ usersRouter.post(
         .pattern(/^(62|062)(\d{4,5}-?\d{4})$/),
       password: Joi.string().required(),
       provider: Joi.boolean(),
+      admin: Joi.boolean(),
     },
   }),
   usersController.create,
