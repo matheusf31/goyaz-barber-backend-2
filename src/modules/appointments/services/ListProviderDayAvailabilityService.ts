@@ -8,6 +8,7 @@ import {
   endOfDay,
   isEqual,
 } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import IUnavailablesRepository from '@modules/unavailables/repositories/IUnavailablesRepository';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
@@ -163,7 +164,9 @@ class ListProviderDayAvailabilityService {
 
       return {
         time,
-        timeFormatted: format(searchDateTime, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+        timeFormatted: format(searchDateTime, "yyyy-MM-dd'T'HH:mm:ssxxx", {
+          locale: ptBR,
+        }),
         available:
           !hasAppointmentInHour &&
           isAfter(searchDateTime, currentDate) &&
