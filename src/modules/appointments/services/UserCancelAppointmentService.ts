@@ -68,7 +68,7 @@ class UserCancelAppointmentService {
 
     if (providerDeviceIds.length === 0) {
       throw new AppError(
-        'Esse prestador de service não está com o celular cadastrado.',
+        'Esse prestador de serviços não está com o celular cadastrado.',
       );
     }
 
@@ -99,8 +99,8 @@ class UserCancelAppointmentService {
         pt: `Data: ${formattedDateBR}`,
       },
       headings: {
-        en: 'You have a new appointment!',
-        pt: 'Você tem um novo agendamento!',
+        en: 'An appointment has been canceled!',
+        pt: 'Um agendamento foi cancelado!',
       },
       include_player_ids: providerDeviceIds,
     };

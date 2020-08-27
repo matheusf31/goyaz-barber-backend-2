@@ -127,15 +127,6 @@ class UserCreateAppointmentService {
         throw new AppError('Serviço inválido.');
     }
 
-    const appointment = await this.appointmentsRepository.create({
-      provider_id,
-      user_id,
-      service,
-      price,
-      date,
-      foreign_client_name,
-    });
-
     const providerDeviceIds = await this.notificationsRepository.findDevicesById(
       provider_id,
     );
@@ -145,6 +136,15 @@ class UserCreateAppointmentService {
         'Esse prestador de service não está com o celular cadastrado.',
       );
     }
+
+    const appointment = await this.appointmentsRepository.create({
+      provider_id,
+      user_id,
+      service,
+      price,
+      date,
+      foreign_client_name,
+    });
 
     let formattedDateBR = '';
     let formattedDateEN = '';

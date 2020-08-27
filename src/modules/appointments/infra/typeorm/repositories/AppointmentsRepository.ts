@@ -10,7 +10,7 @@ import Appointment from '../entities/Appointment';
 import Additional from '../entities/Additional';
 
 const MoreThanDate = (date: Date) =>
-  MoreThan(format(date, 'yyyy-MM-dd kk:mm:ss.SSS'));
+  MoreThan(format(date, "yyyy-MM-dd'T'HH:mm:ssxxx"));
 
 class AppointmentsRepository implements IAppointmentRepository {
   private ormRepository: Repository<Appointment>;
@@ -131,6 +131,7 @@ class AppointmentsRepository implements IAppointmentRepository {
       where: {
         date,
         provider_id,
+        canceled_at: null,
       },
     });
 
