@@ -35,7 +35,7 @@ class ListProviderAppointmentsInfoService {
       appointment => appointment.concluded === true,
     );
 
-    for (let week = 1; week <= 6; week++) {
+    for (let week = 1; week <= 5; week++) {
       const services = [
         {
           description: 'corte',
