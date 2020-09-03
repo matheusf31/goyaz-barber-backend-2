@@ -40,7 +40,7 @@ describe('UserCreateAppointment', () => {
     });
 
     await userCreateAppointment.execute({
-      date: new Date(2020, 4, 9, 9),
+      date: new Date(2020, 4, 9, 14, 30),
       provider_id: '123456',
       user_id: 'user3-id',
       service: 'barba',
@@ -222,7 +222,7 @@ describe('UserCreateAppointment', () => {
     await userCreateAppointment.execute({
       date: appointmentDate,
       provider_id: '123456',
-      user_id: 'user-id',
+      user_id: 'logged-user',
       service: 'corte e barba',
     });
 
@@ -230,7 +230,31 @@ describe('UserCreateAppointment', () => {
       userCreateAppointment.execute({
         date: new Date(2020, 4, 15, 14),
         provider_id: '123456',
-        user_id: 'user-id',
+        user_id: 'logged-user',
+        service: 'corte e barba',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create a schedule of 1 hour if another one already exists less than 30 min', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2020, 4, 11, 9).getTime();
+    });
+
+    const appointmentDate = new Date(2020, 4, 11, 15);
+
+    await userCreateAppointment.execute({
+      date: appointmentDate,
+      provider_id: '123456',
+      user_id: 'logged-user',
+      service: 'corte e barba',
+    });
+
+    await expect(
+      userCreateAppointment.execute({
+        date: new Date(2020, 4, 11, 14, 30, 0),
+        provider_id: '123456',
+        user_id: 'other-user-id',
         service: 'corte e barba',
       }),
     ).rejects.toBeInstanceOf(AppError);

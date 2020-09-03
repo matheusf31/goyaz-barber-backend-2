@@ -6,6 +6,7 @@ import {
   isSunday,
   differenceInDays,
   format,
+  addMinutes,
 } from 'date-fns';
 import { ptBR, enUS } from 'date-fns/locale';
 import { HTTPError } from 'onesignal-node';
@@ -83,6 +84,22 @@ class UserCreateAppointmentService {
 
     if (findAppointmentInSameDate && !findAppointmentInSameDate.canceled_at) {
       throw new AppError('Esse horário já está ocupado.');
+    }
+
+    if (service === 'corte e barba' || service === 'corte e hot towel') {
+      const findAppointmentThirtyMinutesLess = await this.appointmentsRepository.findByDate(
+        addMinutes(date, 30),
+        provider_id,
+      );
+
+      if (
+        findAppointmentThirtyMinutesLess &&
+        !findAppointmentThirtyMinutesLess.canceled_at
+      ) {
+        throw new AppError(
+          'Esse serviço dura 1 hora e o barbeiro possui um cliente há 30 minutos do horário escolhido.',
+        );
+      }
     }
 
     const findAppointment = await this.appointmentsRepository.findExistentUserAppointment(
