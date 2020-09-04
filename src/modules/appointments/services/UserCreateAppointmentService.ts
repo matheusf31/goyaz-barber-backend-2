@@ -97,7 +97,7 @@ class UserCreateAppointmentService {
         !findAppointmentThirtyMinutesLess.canceled_at
       ) {
         throw new AppError(
-          'Esse serviço dura 1 hora e o barbeiro possui um cliente há 30 minutos do horário escolhido.',
+          'Horário indisponível para dois procedimentos. Tente outro horário.',
         );
       }
     }
