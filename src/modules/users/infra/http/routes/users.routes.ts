@@ -27,7 +27,7 @@ usersRouter.post(
       email: Joi.string().email().required(),
       phone: Joi.string()
         .required()
-        .pattern(/^(62|062)(\d{4,5}-?\d{4})$/),
+        .pattern(/^(\d\d)(\d{4,5}-?\d{4})$/),
       password: Joi.string().required(),
       provider: Joi.boolean(),
       admin: Joi.boolean(),
