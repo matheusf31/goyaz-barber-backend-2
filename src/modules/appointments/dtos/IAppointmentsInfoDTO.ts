@@ -17,4 +17,5 @@ export default interface IAppointmentsInfo {
   totalProfitInMonthWithoutAdditionals: number;
   totalProfitInMonthWithAdditionals: number;
   totalCustomersInMonth: number;
+  totalBarberProfit: number;
 }

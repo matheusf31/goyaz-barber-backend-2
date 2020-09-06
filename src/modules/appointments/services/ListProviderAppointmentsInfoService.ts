@@ -23,17 +23,28 @@ class ListProviderAppointmentsInfoService {
     month,
     year,
   }: IRequest): Promise<IAppointmentsInfo> {
-    const appointments = await this.appointmentsRepository.findAllInMonthFromProvider(
-      { provider_id, month, year },
+    const allProvidersAppointments = await this.appointmentsRepository.findAllInMonth(
+      {
+        month,
+        year,
+      },
+    );
+
+    const oneProviderAppointments = allProvidersAppointments.filter(
+      appointment => appointment.provider_id === provider_id,
+    );
+
+    const allProvidersConcludedAppointmentsInMonth = allProvidersAppointments.filter(
+      appointment => appointment.concluded === true,
+    );
+
+    const concludedAppointmentsInMonth = oneProviderAppointments.filter(
+      appointment => appointment.concluded === true,
     );
 
     const appointmentsInfo = {} as IAppointmentsInfo;
 
     appointmentsInfo.weekInfo = [];
-
-    const concludedAppointmentsInMonth = appointments.filter(
-      appointment => appointment.concluded === true,
-    );
 
     for (let week = 1; week <= 6; week++) {
       const services = [
@@ -60,30 +71,30 @@ class ListProviderAppointmentsInfoService {
       ] as IWeekServices;
 
       const profitWithoutAdditionals = concludedAppointmentsInMonth.reduce(
-        (accumulator, appointment) =>
+        (total, appointment) =>
           getWeekOfMonth(appointment.date, {
             locale: pt,
           }) === week
-            ? accumulator + Number(appointment.price)
-            : accumulator,
+            ? total + Number(appointment.price)
+            : total,
         0,
       );
 
       const profitWithAdditionals = concludedAppointmentsInMonth.reduce(
-        (accumulator, appointment) => {
+        (total, appointment) => {
           if (
             getWeekOfMonth(appointment.date, {
               locale: pt,
             }) === week
           ) {
             return (
-              accumulator +
+              total +
               Number(appointment.price) +
               Number(appointment.additionals.total_income)
             );
           }
 
-          return accumulator;
+          return total;
         },
         0,
       );
@@ -118,26 +129,35 @@ class ListProviderAppointmentsInfoService {
     }
 
     const totalProfitInMonthWithoutAdditionals = appointmentsInfo.weekInfo.reduce(
-      (accumulator, week) => accumulator + week.profitWithoutAdditionals,
+      (total, week) => total + week.profitWithoutAdditionals,
       0,
     );
 
     const totalProfitInMonthWithAdditionals = appointmentsInfo.weekInfo.reduce(
-      (accumulator, week) => accumulator + week.profitWithAdditionals,
+      (total, week) => total + week.profitWithAdditionals,
       0,
     );
 
     const totalCustomersInMonth = appointmentsInfo.weekInfo.reduce(
-      (accumulator, week) => accumulator + week.customers,
+      (total, week) => total + week.customers,
       0,
     );
 
-    appointmentsInfo.totalAppointmentsInMonth = appointments.length;
+    const totalBarberProfit = allProvidersConcludedAppointmentsInMonth.reduce(
+      (total, appointment) =>
+        total +
+        Number(appointment.price) +
+        Number(appointment.additionals.total_income),
+      0,
+    );
+
+    appointmentsInfo.totalAppointmentsInMonth = oneProviderAppointments.length;
     appointmentsInfo.concludedAppointmentsInMonth =
       concludedAppointmentsInMonth.length;
     appointmentsInfo.totalProfitInMonthWithoutAdditionals = totalProfitInMonthWithoutAdditionals;
     appointmentsInfo.totalProfitInMonthWithAdditionals = totalProfitInMonthWithAdditionals;
     appointmentsInfo.totalCustomersInMonth = totalCustomersInMonth;
+    appointmentsInfo.totalBarberProfit = totalBarberProfit;
 
     return appointmentsInfo;
   }

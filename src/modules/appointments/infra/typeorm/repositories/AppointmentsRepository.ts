@@ -64,8 +64,7 @@ class AppointmentsRepository implements IAppointmentRepository {
     return appointments;
   }
 
-  public async findAllInMonthFromProvider({
-    provider_id,
+  public async findAllInMonth({
     month,
     year,
   }: IFindAllInDayProviderDTO): Promise<Appointment[]> {
@@ -73,11 +72,11 @@ class AppointmentsRepository implements IAppointmentRepository {
 
     const appointments = await this.ormRepository.find({
       where: {
-        provider_id,
         date: Between(searchDate, endOfMonth(searchDate)),
       },
       select: [
         'id',
+        'provider_id',
         'concluded',
         'date',
         'foreign_client_name',
@@ -85,7 +84,7 @@ class AppointmentsRepository implements IAppointmentRepository {
         'price',
         'canceled_at',
       ],
-      relations: ['additionals'],
+      relations: ['additionals', 'provider'],
     });
 
     return appointments;
