@@ -6,6 +6,7 @@ import UpdateAppointmentAdditionalsService from '@modules/appointments/services/
 
 export default class AdditionalsController {
   public async update(request: Request, response: Response): Promise<Response> {
+    // mudar aqui
     const provider_id = request.user.id;
     const { appointment_id, additional } = request.body;
 
