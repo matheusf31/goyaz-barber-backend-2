@@ -112,8 +112,8 @@ class UserCancelAppointmentService {
     } catch (e) {
       if (e instanceof HTTPError) {
         // When status code of HTTP response is not 2xx, HTTPError is thrown.
-        // console.log(e.statusCode);
-        // console.log(e.body);
+        console.log(e.statusCode);
+        console.log(e.body);
       }
     }
 
