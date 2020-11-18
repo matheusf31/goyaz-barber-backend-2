@@ -39,8 +39,15 @@ class CreateUserService {
   }: IRequest): Promise<User> {
     const checkUserExists = await this.usersRepository.findByEmail(email);
 
-    if (checkUserExists && provider === false) {
+    if (checkUserExists && !provider) {
       throw new AppError('Esse email já está em uso.');
+    }
+
+    // just update to provider
+    if (checkUserExists && provider) {
+      checkUserExists.provider = provider;
+      await this.usersRepository.save(checkUserExists);
+      return checkUserExists;
     }
 
     const hashedPassword = await this.hashProvider.generateHash(password);
