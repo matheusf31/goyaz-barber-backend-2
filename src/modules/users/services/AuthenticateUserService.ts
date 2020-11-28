@@ -62,7 +62,7 @@ class AuthenticateUserService {
 
     const devices = await this.notificationsRepository.findDevicesById(user.id);
 
-    if (!devices.includes(device_id)) {
+    if (!devices.includes(device_id) && device_id !== 'web') {
       await this.notificationsRepository.create({
         device_id,
         user_id: user.id,
