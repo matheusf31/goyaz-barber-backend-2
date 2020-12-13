@@ -80,31 +80,31 @@ class ListProviderAppointmentsDailyInfoService {
         data[weekName][daysOfTheWeek[dayOfWeek]] = {} as IDayOfWeekInfo;
         data[weekName][daysOfTheWeek[dayOfWeek]].clients = 0;
 
+        const services = [
+          {
+            description: 'corte',
+            quantity: 0,
+          },
+          {
+            description: 'corte e barba',
+            quantity: 0,
+          },
+          {
+            description: 'barba',
+            quantity: 0,
+          },
+          {
+            description: 'hot towel',
+            quantity: 0,
+          },
+          {
+            description: 'corte e hot towel',
+            quantity: 0,
+          },
+        ] as IServices;
+
         allConcludedAppointmentsByProvider.forEach(appointment => {
           if (isSameWeekAndDay(appointment.date, week, dayOfWeek)) {
-            const services = [
-              {
-                description: 'corte',
-                quantity: 0,
-              },
-              {
-                description: 'corte e barba',
-                quantity: 0,
-              },
-              {
-                description: 'barba',
-                quantity: 0,
-              },
-              {
-                description: 'hot towel',
-                quantity: 0,
-              },
-              {
-                description: 'corte e hot towel',
-                quantity: 0,
-              },
-            ] as IServices;
-
             const serviceIndex = services.findIndex(
               service => service.description === appointment.service,
             );
@@ -113,10 +113,10 @@ class ListProviderAppointmentsDailyInfoService {
 
             data[weekName][daysOfTheWeek[dayOfWeek]].date = appointment.date;
             data[weekName][daysOfTheWeek[dayOfWeek]].clients += 1;
-            data[weekName][daysOfTheWeek[dayOfWeek]].services = services;
           }
         });
 
+        data[weekName][daysOfTheWeek[dayOfWeek]].services = services;
         totalClientsInMonth += data[weekName][daysOfTheWeek[dayOfWeek]].clients;
       }
 
