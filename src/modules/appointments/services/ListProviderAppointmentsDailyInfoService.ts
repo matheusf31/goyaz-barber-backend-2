@@ -72,7 +72,7 @@ class ListProviderAppointmentsDailyInfoService {
     }
 
     for (let week = 1; week <= 6; week++) {
-      const weekName = `week${week}`;
+      const weekName = `week_${week}`;
 
       data[weekName] = {} as IWeekInfo;
 
