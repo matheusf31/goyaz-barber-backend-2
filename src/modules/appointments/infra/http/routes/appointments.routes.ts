@@ -6,6 +6,7 @@ import ProviderAppointmentController from '../controllers/ProviderAppointmentCon
 import ConcludedAppointmentController from '../controllers/ConcludedAppointmentController';
 import UserAppointmentsController from '../controllers/UserAppointmentsController';
 import AppointmentsInfoController from '../controllers/AppointmentsInfoController';
+import AppointmentsDailyInfoController from '../controllers/AppointmentsDailyInfoController';
 import AdditionalsController from '../controllers/AdditionalsController';
 import AdditionalController from '../controllers/AdditionalController';
 
@@ -15,6 +16,7 @@ const providerAppointmentController = new ProviderAppointmentController();
 const concludedAppointmentController = new ConcludedAppointmentController();
 const userAppointmentsController = new UserAppointmentsController();
 const appointmentsInfoController = new AppointmentsInfoController();
+const appointmentsDailyInfoController = new AppointmentsDailyInfoController();
 const additionalsController = new AdditionalsController();
 const additionalController = new AdditionalController();
 
@@ -110,6 +112,20 @@ appointmentsRouter.get(
     },
   }),
   appointmentsInfoController.index,
+);
+
+appointmentsRouter.get(
+  '/daily/info/:provider_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      provider_id: Joi.string().uuid().required(),
+    },
+    [Segments.QUERY]: {
+      month: Joi.string().required(),
+      year: Joi.string().required(),
+    },
+  }),
+  appointmentsDailyInfoController.index,
 );
 
 appointmentsRouter.put(

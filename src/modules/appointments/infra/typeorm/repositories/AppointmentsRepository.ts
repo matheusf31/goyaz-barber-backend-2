@@ -90,6 +90,36 @@ class AppointmentsRepository implements IAppointmentRepository {
     return appointments;
   }
 
+  public async findAllConcludedInMonth({
+    provider_id,
+    month,
+    year,
+  }: IFindAllInDayProviderDTO): Promise<Appointment[]> {
+    const searchDate = new Date(year, month - 1);
+
+    const appointments = await this.ormRepository.find({
+      where: {
+        date: Between(searchDate, endOfMonth(searchDate)),
+        provider_id,
+        concluded: true,
+        canceled_at: null,
+      },
+      select: [
+        'id',
+        'provider_id',
+        'concluded',
+        'date',
+        'foreign_client_name',
+        'service',
+        'price',
+        'canceled_at',
+      ],
+      relations: ['additionals', 'provider'],
+    });
+
+    return appointments;
+  }
+
   public async findAllUserAppointmentsInMonth({
     user_id,
     month,
