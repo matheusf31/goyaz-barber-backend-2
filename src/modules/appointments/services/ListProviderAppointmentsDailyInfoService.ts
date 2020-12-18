@@ -72,9 +72,11 @@ class ListProviderAppointmentsDailyInfoService {
     }
 
     for (let week = 1; week <= 6; week++) {
-      const weekName = `week_${week}`;
+      const weekName = `week ${week}`;
+      let totalClientsInWeek = 0;
 
       data[weekName] = {} as IWeekInfo;
+      data[weekName].totalClientsInWeek = totalClientsInWeek;
 
       for (let dayOfWeek = 1; dayOfWeek <= 6; dayOfWeek++) {
         data[weekName][daysOfTheWeek[dayOfWeek]] = {} as IDayOfWeekInfo;
@@ -117,7 +119,7 @@ class ListProviderAppointmentsDailyInfoService {
         });
 
         data[weekName][daysOfTheWeek[dayOfWeek]].services = services;
-        totalClientsInMonth += data[weekName][daysOfTheWeek[dayOfWeek]].clients;
+        totalClientsInWeek += data[weekName][daysOfTheWeek[dayOfWeek]].clients;
       }
 
       const profitWithoutAdditionals = allConcludedAppointmentsByProvider.reduce(
@@ -145,7 +147,9 @@ class ListProviderAppointmentsDailyInfoService {
 
       data[weekName].profitWithoutAdditionals = profitWithoutAdditionals;
       data[weekName].profitWithAdditionals = profitWithAdditionals;
+      data[weekName].totalClientsInWeek = totalClientsInWeek;
 
+      totalClientsInMonth += totalClientsInWeek;
       totalProfitInMonthWithoutAdditionals += profitWithoutAdditionals;
       totalProfitInMonthWithAdditionals += profitWithAdditionals;
     }
