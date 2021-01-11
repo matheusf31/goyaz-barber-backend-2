@@ -6,7 +6,6 @@ import UpdateAppointmentAdditionalsService from '@modules/appointments/services/
 
 export default class AdditionalsController {
   public async update(request: Request, response: Response): Promise<Response> {
-    const provider_id = request.user.id;
     const { appointment_id, additional } = request.body;
 
     const updateAppointmentAdditionals = container.resolve(
@@ -14,7 +13,6 @@ export default class AdditionalsController {
     );
 
     const appointment = await updateAppointmentAdditionals.execute({
-      provider_id,
       appointment_id,
       additional,
     });

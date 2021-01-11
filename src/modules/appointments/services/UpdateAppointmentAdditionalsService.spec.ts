@@ -27,7 +27,6 @@ describe('UpdateAppointmentAdditionals', () => {
 
     const appointmentAdditionals = await updateAppointmentAdditionals.execute({
       appointment_id: appointment.id,
-      provider_id: 'provider-id',
       additional: {
         description: 'cerveja',
         value: 7.5,
@@ -37,7 +36,6 @@ describe('UpdateAppointmentAdditionals', () => {
 
     await updateAppointmentAdditionals.execute({
       appointment_id: appointment.id,
-      provider_id: 'provider-id',
       additional: {
         description: 'cerveja',
         value: 7.5,
@@ -56,7 +54,6 @@ describe('UpdateAppointmentAdditionals', () => {
     await expect(
       updateAppointmentAdditionals.execute({
         appointment_id: 'non-existing',
-        provider_id: 'provider-id',
         additional: {
           description: 'cerveja',
           value: 7.5,
@@ -78,33 +75,10 @@ describe('UpdateAppointmentAdditionals', () => {
     await expect(
       updateAppointmentAdditionals.execute({
         appointment_id: appointment.id,
-        provider_id: 'provider-id',
         additional: {
           description: 'cerveja',
           value: 7.5,
           quantity: 0,
-        },
-      }),
-    ).rejects.toBeInstanceOf(AppError);
-  });
-
-  it('should be able to update appointment additionals service from another provider', async () => {
-    const appointment = await fakeAppointmentsRepository.create({
-      provider_id: 'provider-id',
-      date: new Date(2020, 4, 5, 14, 0, 0),
-      user_id: 'any',
-      service: 'corte',
-      price: 25,
-    });
-
-    await expect(
-      updateAppointmentAdditionals.execute({
-        appointment_id: appointment.id,
-        provider_id: 'another-provider-id',
-        additional: {
-          description: 'cerveja',
-          value: 7.5,
-          quantity: 1,
         },
       }),
     ).rejects.toBeInstanceOf(AppError);
@@ -121,7 +95,6 @@ describe('UpdateAppointmentAdditionals', () => {
 
     updateAppointmentAdditionals.execute({
       appointment_id: appointment.id,
-      provider_id: 'provider-id',
       additional: {
         description: 'cerveja',
         value: 7.5,
@@ -132,7 +105,6 @@ describe('UpdateAppointmentAdditionals', () => {
     await expect(
       updateAppointmentAdditionals.execute({
         appointment_id: appointment.id,
-        provider_id: 'provider-id',
         additional: {
           description: 'cerveja',
           value: 8,

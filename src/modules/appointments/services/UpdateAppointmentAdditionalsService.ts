@@ -21,7 +21,6 @@ interface IAdditional {
 interface IRequest {
   additional: IAdditional;
   appointment_id: string;
-  provider_id: string;
 }
 
 @injectable()
@@ -34,7 +33,6 @@ class UpdateAppointmentAdditionalsService {
   public async execute({
     additional,
     appointment_id,
-    provider_id,
   }: IRequest): Promise<Appointment> {
     const appointment = await this.appointmentsRepository.findById(
       appointment_id,
@@ -42,10 +40,6 @@ class UpdateAppointmentAdditionalsService {
 
     if (!appointment) {
       throw new AppError('O agendamento não foi encontrado.');
-    }
-
-    if (appointment.provider_id !== provider_id) {
-      throw new AppError('Você não pode alterar esse agendamento.');
     }
 
     if (additional.quantity === 0) {

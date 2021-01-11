@@ -11,7 +11,7 @@ const unavailableController = new UnavailableController();
 unavailableRouter.use(ensureAuthenticated);
 
 unavailableRouter.post(
-  '/set-unavailable',
+  '/set-unavailable/:provider_id',
   celebrate({
     [Segments.BODY]: {
       date: Joi.date().required(),

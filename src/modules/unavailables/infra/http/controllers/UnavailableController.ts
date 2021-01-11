@@ -6,7 +6,7 @@ import MarkHourUnavailableService from '@modules/unavailables/services/MarkHourU
 
 export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const provider_id = request.user.id;
+    const { provider_id } = request.params;
     const { date, is_unavailable } = request.body;
 
     const markHourUnavailable = container.resolve(MarkHourUnavailableService);

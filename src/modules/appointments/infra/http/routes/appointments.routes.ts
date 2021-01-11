@@ -62,7 +62,7 @@ appointmentsRouter.patch(
  * Provider Appointment Controller
  */
 appointmentsRouter.post(
-  '/provider',
+  '/provider/:provider_id',
   celebrate({
     [Segments.BODY]: {
       user_id: Joi.string().uuid(),
