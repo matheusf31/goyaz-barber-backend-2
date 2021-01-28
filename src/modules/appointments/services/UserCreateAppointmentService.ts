@@ -7,6 +7,7 @@ import {
   differenceInDays,
   format,
   addMinutes,
+  subHours,
 } from 'date-fns';
 import { ptBR, enUS } from 'date-fns/locale';
 import { HTTPError } from 'onesignal-node';
@@ -16,6 +17,7 @@ import AppError from '@shared/errors/AppError';
 import { client } from '@shared/container/providers/OneSignal';
 
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+import { CreateNotificationBody } from 'onesignal-node/lib/types';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
@@ -158,6 +160,10 @@ class UserCreateAppointmentService {
       provider_id,
     );
 
+    const userDeviceIds = await this.notificationsRepository.findDevicesById(
+      user_id,
+    );
+
     if (providerDeviceIds.length === 0) {
       throw new AppError(
         'Esse prestador de service não está com o celular cadastrado.',
@@ -194,7 +200,7 @@ class UserCreateAppointmentService {
       });
     }
 
-    const notification = {
+    const notificationToProvider: CreateNotificationBody = {
       contents: {
         en: `Date: ${formattedDateEN}`,
         pt: `Data: ${formattedDateBR}`,
@@ -206,9 +212,28 @@ class UserCreateAppointmentService {
       include_player_ids: providerDeviceIds,
     };
 
+    const oneHourFromAppointmentDate = subHours(date, 1);
+
+    const notificationToClient: CreateNotificationBody = {
+      contents: {
+        en: `Date: ${formattedDateEN}`,
+        pt: `Data marcada: ${formattedDateBR}`,
+      },
+      headings: {
+        en: `You have a appointment today!`,
+        pt: `Você possui um agendamento hoje!`,
+      },
+      include_player_ids: userDeviceIds,
+      send_after: format(oneHourFromAppointmentDate, 'ccc MMM dd yyyy pppp'),
+    };
+
     try {
       // const response = await client.createNotification(notification);
-      await client.createNotification(notification);
+      await client.createNotification(notificationToProvider);
+
+      if (userDeviceIds) {
+        await client.createNotification(notificationToClient);
+      }
       // console.log(response.body);
     } catch (e) {
       if (e instanceof HTTPError) {

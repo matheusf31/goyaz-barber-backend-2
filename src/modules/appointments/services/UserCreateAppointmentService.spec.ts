@@ -260,7 +260,7 @@ describe('UserCreateAppointment', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should note be able to create a appointment with provider without device id', async () => {
+  it('should not be able to create a appointment with provider without device id', async () => {
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date(2020, 4, 9, 8).getTime();
     });
