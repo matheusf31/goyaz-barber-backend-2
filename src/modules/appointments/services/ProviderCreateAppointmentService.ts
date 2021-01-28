@@ -100,64 +100,64 @@ class ProviderCreateAppointmentService {
       foreign_client_name,
     });
 
-    if (user_id) {
-      const oneHourFromAppointmentDate = subHours(date, 1);
+    // if (user_id) {
+    //   const oneHourFromAppointmentDate = subHours(date, 1);
 
-      let formattedDateBR = '';
-      let formattedDateEN = '';
+    //   let formattedDateBR = '';
+    //   let formattedDateEN = '';
 
-      if (differenceInDays(date, new Date()) >= 6) {
-        formattedDateBR = format(date, 'dd/MM/RR - HH:mm', {
-          locale: ptBR,
-        });
+    //   if (differenceInDays(date, new Date()) >= 6) {
+    //     formattedDateBR = format(date, 'dd/MM/RR - HH:mm', {
+    //       locale: ptBR,
+    //     });
 
-        formattedDateEN = format(date, 'dd/MM/RR - HH:mm', {
-          locale: enUS,
-        });
-      } else {
-        formattedDateBR = formatRelative(date, new Date(), {
-          locale: ptBR,
-        });
+    //     formattedDateEN = format(date, 'dd/MM/RR - HH:mm', {
+    //       locale: enUS,
+    //     });
+    //   } else {
+    //     formattedDateBR = formatRelative(date, new Date(), {
+    //       locale: ptBR,
+    //     });
 
-        formattedDateEN = formatRelative(date, new Date(), {
-          locale: enUS,
-        });
-      }
+    //     formattedDateEN = formatRelative(date, new Date(), {
+    //       locale: enUS,
+    //     });
+    //   }
 
-      const userDeviceIds = await this.notificationsRepository.findDevicesById(
-        user_id,
-      );
+    //   const userDeviceIds = await this.notificationsRepository.findDevicesById(
+    //     user_id,
+    //   );
 
-      if (userDeviceIds) {
-        const notificationToClient: CreateNotificationBody = {
-          contents: {
-            en: `Date: ${formattedDateEN}`,
-            pt: `Data marcada: ${formattedDateBR}`,
-          },
-          headings: {
-            en: `You have a appointment today!`,
-            pt: `Você possui um agendamento hoje!`,
-          },
-          include_player_ids: userDeviceIds,
-          send_after: format(
-            oneHourFromAppointmentDate,
-            'ccc MMM dd yyyy pppp',
-          ),
-        };
+    //   if (userDeviceIds) {
+    //     const notificationToClient: CreateNotificationBody = {
+    //       contents: {
+    //         en: `Date: ${formattedDateEN}`,
+    //         pt: `Data marcada: ${formattedDateBR}`,
+    //       },
+    //       headings: {
+    //         en: `You have a appointment today!`,
+    //         pt: `Você possui um agendamento hoje!`,
+    //       },
+    //       include_player_ids: userDeviceIds,
+    //       send_after: format(
+    //         oneHourFromAppointmentDate,
+    //         'ccc MMM dd yyyy pppp',
+    //       ),
+    //     };
 
-        try {
-          // const response = await client.createNotification(notification);
-          await client.createNotification(notificationToClient);
-          // console.log(response.body);
-        } catch (e) {
-          if (e instanceof HTTPError) {
-            // When status code of HTTP response is not 2xx, HTTPError is thrown.
-            // console.log(e.statusCode);
-            // console.log(e.body);
-          }
-        }
-      }
-    }
+    //     try {
+    //       // const response = await client.createNotification(notification);
+    //       await client.createNotification(notificationToClient);
+    //       // console.log(response.body);
+    //     } catch (e) {
+    //       if (e instanceof HTTPError) {
+    //         // When status code of HTTP response is not 2xx, HTTPError is thrown.
+    //         // console.log(e.statusCode);
+    //         // console.log(e.body);
+    //       }
+    //     }
+    //   }
+    // }
 
     return appointment;
   }
