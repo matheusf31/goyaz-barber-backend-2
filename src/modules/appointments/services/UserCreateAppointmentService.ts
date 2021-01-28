@@ -28,6 +28,8 @@ interface IRequest {
     | 'corte e barba'
     | 'barba'
     | 'hot towel'
+    | 'pezinho'
+    | 'corte militar'
     | 'corte e hot towel'
     | 'any for test';
   date: Date;
@@ -134,6 +136,14 @@ class UserCreateAppointmentService {
 
       case 'hot towel':
         price = 25;
+        break;
+
+      case 'pezinho':
+        price = 10;
+        break;
+
+      case 'corte militar':
+        price = 15;
         break;
 
       case 'corte e hot towel':

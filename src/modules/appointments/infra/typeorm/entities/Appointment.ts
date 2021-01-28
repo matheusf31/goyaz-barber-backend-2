@@ -42,6 +42,8 @@ class Appointment {
     | 'corte e barba'
     | 'barba'
     | 'hot towel'
+    | 'pezinho'
+    | 'corte militar'
     | 'corte e hot towel';
 
   @Column('decimal')

@@ -100,6 +100,14 @@ class ListProviderAppointmentsDailyInfoService {
             quantity: 0,
           },
           {
+            description: 'pezinho',
+            quantity: 0,
+          },
+          {
+            description: 'corte militar',
+            quantity: 0,
+          },
+          {
             description: 'corte e hot towel',
             quantity: 0,
           },

@@ -50,6 +50,6 @@ describe('ListProviderAppointmentsDailyInfoService', () => {
       },
     );
 
-    expect(appointmentsInfo).toHaveProperty('week1');
+    expect(appointmentsInfo).toHaveProperty('week 1');
   });
 });

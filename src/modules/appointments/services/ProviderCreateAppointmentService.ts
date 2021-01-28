@@ -15,6 +15,8 @@ interface IRequest {
     | 'barba'
     | 'hot towel'
     | 'corte e hot towel'
+    | 'pezinho'
+    | 'corte militar'
     | 'any for test';
   date: Date;
   foreign_client_name?: string;
@@ -64,6 +66,14 @@ class ProviderCreateAppointmentService {
 
       case 'hot towel':
         price = 25;
+        break;
+
+      case 'pezinho':
+        price = 10;
+        break;
+
+      case 'corte militar':
+        price = 15;
         break;
 
       case 'corte e hot towel':

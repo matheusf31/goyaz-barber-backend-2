@@ -39,7 +39,6 @@ describe('UpdateAppointmentAdditionals', () => {
 
     const appointmentAdditionals = await updateAppointmentAdditionals.execute({
       appointment_id: appointment.id,
-      provider_id: 'provider-id',
       additional: {
         description: 'cerveja',
         value: 7.5,
@@ -68,7 +67,6 @@ describe('UpdateAppointmentAdditionals', () => {
 
     const appointmentAdditionals = await updateAppointmentAdditionals.execute({
       appointment_id: appointment.id,
-      provider_id: 'provider-id',
       additional: {
         description: 'cerveja',
         value: 7.5,
@@ -78,7 +76,6 @@ describe('UpdateAppointmentAdditionals', () => {
 
     await updateAppointmentAdditionals.execute({
       appointment_id: appointment.id,
-      provider_id: 'provider-id',
       additional: {
         description: 'cerveja',
         value: 7.5,
@@ -120,7 +117,6 @@ describe('UpdateAppointmentAdditionals', () => {
 
     const appointmentAdditionals = await updateAppointmentAdditionals.execute({
       appointment_id: appointment.id,
-      provider_id: 'provider-id',
       additional: {
         description: 'cerveja',
         value: 7.5,
@@ -148,7 +144,6 @@ describe('UpdateAppointmentAdditionals', () => {
 
     const appointmentAdditionals = await updateAppointmentAdditionals.execute({
       appointment_id: appointment.id,
-      provider_id: 'provider-id',
       additional: {
         description: 'cerveja',
         value: 7.5,

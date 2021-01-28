@@ -5,6 +5,8 @@ export default interface ICreateAppointmentDTO {
     | 'corte'
     | 'corte e barba'
     | 'barba'
+    | 'pezinho'
+    | 'corte militar'
     | 'hot towel'
     | 'corte e hot towel';
   price: number;

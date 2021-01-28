@@ -51,4 +51,23 @@ describe('CreateUser', () => {
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
+
+  it('should update user to provider', async () => {
+    await createUser.execute({
+      name: 'John',
+      email: 'johndoe@gmail.com',
+      phone: '994622353',
+      password: '123123',
+    });
+
+    const user = await createUser.execute({
+      name: 'John',
+      email: 'johndoe@gmail.com',
+      phone: '994622353',
+      password: '123123',
+      provider: true,
+    });
+
+    expect(user.provider).toBeTruthy();
+  });
 });

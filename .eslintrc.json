@@ -22,7 +22,12 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "import/prefer-default-export": "off",
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "import/no-duplicates": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "no-param-reassign": "off",

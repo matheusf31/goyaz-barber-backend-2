@@ -55,6 +55,20 @@ describe('ProviderCreateAppointment', () => {
       service: 'hot towel',
     });
 
+    await providerCreateAppointment.execute({
+      date: new Date(2020, 4, 9, 14, 30),
+      provider_id: 'provider5-id',
+      user_id: 'user5-id',
+      service: 'pezinho',
+    });
+
+    await providerCreateAppointment.execute({
+      date: new Date(2020, 4, 9, 15, 30),
+      provider_id: 'provider5-id',
+      user_id: 'user5-id',
+      service: 'corte militar',
+    });
+
     expect(appointment).toHaveProperty('id');
     expect(appointment).toHaveProperty('additionals');
     expect(appointment.provider_id).toBe('123123');
