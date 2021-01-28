@@ -142,6 +142,7 @@ class ProviderCreateAppointmentService {
     //       send_after: format(
     //         oneHourFromAppointmentDate,
     //         'ccc MMM dd yyyy pppp',
+    //         { locale: ptBR },
     //       ),
     //     };
 

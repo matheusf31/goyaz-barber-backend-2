@@ -224,7 +224,9 @@ class UserCreateAppointmentService {
         pt: `Você possui um agendamento hoje!`,
       },
       include_player_ids: userDeviceIds,
-      send_after: format(oneHourFromAppointmentDate, 'ccc MMM dd yyyy pppp'),
+      send_after: format(oneHourFromAppointmentDate, 'ccc MMM dd yyyy pppp', {
+        locale: ptBR,
+      }),
     };
 
     try {
