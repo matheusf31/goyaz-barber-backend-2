@@ -8,6 +8,8 @@ import {
   format,
   addMinutes,
   subHours,
+  differenceInSeconds,
+  differenceInMinutes,
 } from 'date-fns';
 import { ptBR, enUS } from 'date-fns/locale';
 import { HTTPError } from 'onesignal-node';
@@ -18,6 +20,7 @@ import { client } from '@shared/container/providers/OneSignal';
 
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import { CreateNotificationBody } from 'onesignal-node/lib/types';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
@@ -46,6 +49,9 @@ class UserCreateAppointmentService {
 
     @inject('NotificationsRepository')
     private notificationsRepository: INotificationsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -179,64 +185,76 @@ class UserCreateAppointmentService {
       foreign_client_name,
     });
 
-    let formattedDateBR = '';
-    let formattedDateEN = '';
-
-    if (differenceInDays(date, new Date()) >= 6) {
-      formattedDateBR = format(date, 'dd/MM/RR - HH:mm', {
-        locale: ptBR,
-      });
-
-      formattedDateEN = format(date, 'dd/MM/RR - HH:mm', {
-        locale: enUS,
-      });
-    } else {
-      formattedDateBR = formatRelative(date, new Date(), {
-        locale: ptBR,
-      });
-
-      formattedDateEN = formatRelative(date, new Date(), {
-        locale: enUS,
-      });
-    }
-
-    const notificationToProvider: CreateNotificationBody = {
-      contents: {
-        en: `Date: ${formattedDateEN}`,
-        pt: `Data: ${formattedDateBR}`,
-      },
-      headings: {
-        en: 'You have a new appointment!',
-        pt: 'Você tem um novo agendamento!',
-      },
-      include_player_ids: providerDeviceIds,
-    };
-
-    const oneHourFromAppointmentDate = subHours(date, 1);
-
-    const notificationToClient: CreateNotificationBody = {
-      contents: {
-        en: `Date: ${formattedDateEN}`,
-        pt: `Data marcada: ${formattedDateBR}`,
-      },
-      headings: {
-        en: `You have a appointment today!`,
-        pt: `Você possui um agendamento hoje!`,
-      },
-      include_player_ids: userDeviceIds,
-      send_after: format(oneHourFromAppointmentDate, 'ccc MMM dd yyyy pppp', {
-        locale: ptBR,
-      }),
-    };
-
     try {
-      // const response = await client.createNotification(notification);
+      let formattedDateBR = '';
+      let formattedDateEN = '';
+
+      if (differenceInDays(date, new Date()) >= 6) {
+        formattedDateBR = format(date, 'dd/MM/RR - HH:mm', {
+          locale: ptBR,
+        });
+
+        formattedDateEN = format(date, 'dd/MM/RR - HH:mm', {
+          locale: enUS,
+        });
+      } else {
+        formattedDateBR = formatRelative(date, new Date(), {
+          locale: ptBR,
+        });
+
+        formattedDateEN = formatRelative(date, new Date(), {
+          locale: enUS,
+        });
+      }
+
+      const notificationToProvider: CreateNotificationBody = {
+        contents: {
+          en: `Date: ${formattedDateEN}`,
+          pt: `Data: ${formattedDateBR}`,
+        },
+        headings: {
+          en: 'You have a new appointment!',
+          pt: 'Você tem um novo agendamento!',
+        },
+        include_player_ids: providerDeviceIds,
+      };
+
       await client.createNotification(notificationToProvider);
 
-      if (userDeviceIds) {
-        await client.createNotification(notificationToClient);
+      if (
+        userDeviceIds &&
+        differenceInMinutes(appointment.date, new Date()) > 60
+      ) {
+        const oneHourFromAppointmentDate = subHours(date, 1);
+
+        const notificationToClient: CreateNotificationBody = {
+          contents: {
+            en: `Appointment schedule to: ${formattedDateEN}. Avoid delays, please arrive in advance.`,
+            pt: `Agendamento marcado para ${formattedDateBR}. Evite atrasos, por gentileza chegue com antecedência.`,
+          },
+          headings: {
+            en: `You have a appointment today!`,
+            pt: `Você possui um agendamento hoje!`,
+          },
+          include_player_ids: userDeviceIds,
+          send_after: format(
+            oneHourFromAppointmentDate,
+            'ccc MMM dd yyyy pppp',
+            {
+              locale: ptBR,
+            },
+          ),
+        };
+
+        const response = await client.createNotification(notificationToClient);
+
+        await this.cacheProvider.save(
+          `notification@client-id:${user_id}@appointment-id:${appointment.id}`,
+          response.body.id,
+          'EX',
+          differenceInSeconds(appointment.date, new Date()),
+        );
       }
-      // console.log(response.body);
     } catch (e) {
       if (e instanceof HTTPError) {
         // When status code of HTTP response is not 2xx, HTTPError is thrown.

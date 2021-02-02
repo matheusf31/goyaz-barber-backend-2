@@ -13,6 +13,7 @@ import AppError from '@shared/errors/AppError';
 import { client } from '@shared/container/providers/OneSignal';
 
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
@@ -30,6 +31,9 @@ class UserCancelAppointmentService {
 
     @inject('NotificationsRepository')
     private notificationsRepository: INotificationsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -93,7 +97,7 @@ class UserCancelAppointmentService {
       });
     }
 
-    const notification = {
+    const notificationToProvider = {
       contents: {
         en: `Date: ${formattedDateEN}`,
         pt: `Data: ${formattedDateBR}`,
@@ -106,12 +110,21 @@ class UserCancelAppointmentService {
     };
 
     try {
-      // const response = await client.createNotification(notification);
-      await client.createNotification(notification);
-      // console.log(response.body);
+      await client.createNotification(notificationToProvider);
+
+      const notificationId = await this.cacheProvider.recover<string>(
+        `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
+      );
+
+      if (notificationId) {
+        await client.cancelNotification(notificationId);
+
+        this.cacheProvider.invalidate(
+          `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
+        );
+      }
     } catch (e) {
       if (e instanceof HTTPError) {
-        // When status code of HTTP response is not 2xx, HTTPError is thrown.
         console.log(e.statusCode);
         console.log(e.body);
       }

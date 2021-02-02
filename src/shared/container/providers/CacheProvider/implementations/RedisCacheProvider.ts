@@ -9,7 +9,16 @@ export default class RedisCacheProvider implements ICacheProvider {
     this.client = new Redis(cacheConfig.config.redis);
   }
 
-  public async save(key: string, value: any): Promise<void> {
+  public async save(
+    key: string,
+    value: any,
+    option?: string,
+    time?: number,
+  ): Promise<void> {
+    if (option && time) {
+      await this.client.set(key, JSON.stringify(value), option, time);
+    }
+
     await this.client.set(key, JSON.stringify(value));
   }
 
