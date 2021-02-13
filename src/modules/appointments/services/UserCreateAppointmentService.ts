@@ -21,6 +21,7 @@ import { client } from '@shared/container/providers/OneSignal';
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import { CreateNotificationBody } from 'onesignal-node/lib/types';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import IUnavailablesRepository from '@modules/unavailables/repositories/IUnavailablesRepository';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
@@ -52,6 +53,9 @@ class UserCreateAppointmentService {
 
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider,
+
+    @inject('UnavailablesRepository')
+    private unavailablesRepository: IUnavailablesRepository,
   ) {}
 
   public async execute({
@@ -97,17 +101,26 @@ class UserCreateAppointmentService {
     }
 
     if (service === 'corte e barba' || service === 'corte e hot towel') {
-      const findAppointmentThirtyMinutesLess = await this.appointmentsRepository.findByDate(
+      const findAppointmentThirtyMinutesLater = await this.appointmentsRepository.findByDate(
         addMinutes(date, 30),
         provider_id,
       );
 
+      const findUnavailableThirtyMinutesLater = await this.unavailablesRepository.findUnavailableByDate(
+        {
+          provider_id,
+          date: addMinutes(date, 30),
+        },
+      );
+
       if (
-        findAppointmentThirtyMinutesLess &&
-        !findAppointmentThirtyMinutesLess.canceled_at
+        (findAppointmentThirtyMinutesLater &&
+          !findAppointmentThirtyMinutesLater.canceled_at) ||
+        (findUnavailableThirtyMinutesLater &&
+          findUnavailableThirtyMinutesLater.is_unavailable)
       ) {
         throw new AppError(
-          'Horário indisponível para dois procedimentos. Tente outro horário.',
+          'Horário disponível apenas para procedimentos de 30 minutos. Por gentileza, tente outro horário.',
         );
       }
     }
