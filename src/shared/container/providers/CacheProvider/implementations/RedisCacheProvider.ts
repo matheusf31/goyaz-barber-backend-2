@@ -17,9 +17,9 @@ export default class RedisCacheProvider implements ICacheProvider {
   ): Promise<void> {
     if (option && time) {
       await this.client.set(key, JSON.stringify(value), option, time);
+    } else {
+      await this.client.set(key, JSON.stringify(value));
     }
-
-    await this.client.set(key, JSON.stringify(value));
   }
 
   public async recover<T>(key: string): Promise<T | null> {
