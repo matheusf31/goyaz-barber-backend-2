@@ -32,7 +32,7 @@
     "onesignal-node": "^3.1.5",
     "pg": "^8.2.1",
     "rate-limiter-flexible": "^2.1.7",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "reflect-metadata": "^0.1.13",
     "socket.io": "^2.4.0",
     "tsyringe": "^4.3.0",
