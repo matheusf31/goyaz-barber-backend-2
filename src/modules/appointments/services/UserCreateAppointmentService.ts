@@ -144,19 +144,19 @@ class UserCreateAppointmentService {
 
     switch (service) {
       case 'corte':
-        price = 25;
+        price = 30;
         break;
 
       case 'barba':
-        price = 18;
+        price = 20;
         break;
 
       case 'corte e barba':
-        price = 35;
+        price = 40;
         break;
 
       case 'hot towel':
-        price = 25;
+        price = 30;
         break;
 
       case 'pezinho':
@@ -168,7 +168,7 @@ class UserCreateAppointmentService {
         break;
 
       case 'corte e hot towel':
-        price = 45;
+        price = 50;
         break;
 
       default:
