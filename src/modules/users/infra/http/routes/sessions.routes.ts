@@ -13,7 +13,7 @@ sessionsRouter.post(
     [Segments.BODY]: {
       email: Joi.string().email().required(),
       password: Joi.string().required(),
-      device_id: Joi.string().required(),
+      device_id: Joi.required(),
     },
   }),
   sessionsController.create,
