@@ -87,6 +87,9 @@ class ListProviderDayAvailabilityService {
         '10:30',
         '11:00',
         '11:30',
+        '12:00',
+        '12:30',
+        '13:00',
         '13:30',
         '14:00',
         '14:30',
@@ -104,6 +107,9 @@ class ListProviderDayAvailabilityService {
         '10:30',
         '11:00',
         '11:30',
+        '12:00',
+        '12:30',
+        '13:00',
         '13:30',
         '14:00',
         '14:30',
@@ -162,6 +168,10 @@ class ListProviderDayAvailabilityService {
         },
       );
 
+      const providerPreBusy =
+        (time === '12:00' || time === '12:30' || time === '13:00') &&
+        !hasUnavailableInHour;
+
       return {
         time,
         timeFormatted: format(searchDateTime, "yyyy-MM-dd'T'HH:mm:ssxxx", {
@@ -173,10 +183,11 @@ class ListProviderDayAvailabilityService {
           !isSunday(searchDateTime) &&
           !hasHourlyServiceThirtyMinutesFromTheSearchDateTime &&
           !hasUnavailableInHour?.is_unavailable === true &&
+          !providerPreBusy &&
           !hasDayBusy?.is_unavailable === true,
         appointment: hasAppointmentInHour,
         past: !isAfter(searchDateTime, currentDate),
-        providerBusy: hasUnavailableInHour?.is_unavailable,
+        providerBusy: hasUnavailableInHour?.is_unavailable || providerPreBusy,
         dayBusy: hasDayBusy?.is_unavailable,
       };
     });
