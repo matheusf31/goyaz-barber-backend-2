@@ -125,20 +125,20 @@ class UserCreateAppointmentService {
       }
     }
 
-    const findAppointment = await this.appointmentsRepository.findExistentUserAppointment(
-      user_id,
-    );
+    // const findAppointment = await this.appointmentsRepository.findExistentUserAppointment(
+    //   user_id,
+    // );
 
-    if (findAppointment) {
-      const dateFormatted = format(
-        findAppointment.date,
-        "dd/MM 'às' HH:mm 'horas'",
-      );
+    // if (findAppointment) {
+    //   const dateFormatted = format(
+    //     findAppointment.date,
+    //     "dd/MM 'às' HH:mm 'horas'",
+    //   );
 
-      throw new AppError(
-        `Você já possui um agendamento para o dia ${dateFormatted}.`,
-      );
-    }
+    //   throw new AppError(
+    //     `Você já possui um agendamento para o dia ${dateFormatted}.`,
+    //   );
+    // }
 
     let price: number;
 
