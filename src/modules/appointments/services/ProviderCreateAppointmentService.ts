@@ -78,7 +78,7 @@ class ProviderCreateAppointmentService {
         break;
 
       case 'corte e barba':
-        price = 40;
+        price = 45;
         break;
 
       case 'hot towel':
@@ -94,7 +94,7 @@ class ProviderCreateAppointmentService {
         break;
 
       case 'corte e hot towel':
-        price = 50;
+        price = 55;
         break;
 
       default:
