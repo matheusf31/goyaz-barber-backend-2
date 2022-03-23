@@ -3,6 +3,7 @@ import AppError from '@shared/errors/AppError';
 import FakeNotificationsRepository from '@modules/notifications/repositories/fakes/FakeNotificationsRepository';
 import FakeUnavailablesRepository from '@modules/unavailables/repositories/fakes/FakeUnavailablesRepository';
 import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
+import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
 import UserCreateAppointmentService from './UserCreateAppointmentService';
 import ProviderDeleteAppointmentService from './ProviderDeleteAppointmentService';
@@ -10,6 +11,7 @@ import ProviderDeleteAppointmentService from './ProviderDeleteAppointmentService
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
 let fakeNotificationsRepository: FakeNotificationsRepository;
 let fakeUnavailablesRepository: FakeUnavailablesRepository;
+let fakeUserRepository: FakeUsersRepository;
 let fakeCacheProvider: FakeCacheProvider;
 let userCreateAppointment: UserCreateAppointmentService;
 let providerDeleteAppointmentService: ProviderDeleteAppointmentService;
@@ -23,6 +25,7 @@ describe('ProviderDeleteAppointment', () => {
 
     userCreateAppointment = new UserCreateAppointmentService(
       fakeAppointmentsRepository,
+      fakeUserRepository,
       fakeNotificationsRepository,
       fakeCacheProvider,
       fakeUnavailablesRepository,

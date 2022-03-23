@@ -22,6 +22,7 @@ import INotificationsRepository from '@modules/notifications/repositories/INotif
 import { CreateNotificationBody } from 'onesignal-node/lib/types';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IUnavailablesRepository from '@modules/unavailables/repositories/IUnavailablesRepository';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
@@ -47,6 +48,9 @@ class UserCreateAppointmentService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
 
     @inject('NotificationsRepository')
     private notificationsRepository: INotificationsRepository,
@@ -89,6 +93,14 @@ class UserCreateAppointmentService {
 
     if (user_id === provider_id) {
       throw new AppError('Você não pode marcar um agendamento consigo mesmo.');
+    }
+
+    const user = await this.usersRepository.findById(user_id);
+
+    if (user?.banned) {
+      throw new AppError(
+        'Você não pode marcar um agendamento, você está banido do aplicativo. Entre em contato com a barbearia',
+      );
     }
 
     const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
