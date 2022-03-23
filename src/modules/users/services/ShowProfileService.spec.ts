@@ -1,16 +1,22 @@
 import AppError from '@shared/errors/AppError';
 
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import ShowProfileService from './ShowProfileService';
 
 let fakeUsersRepository: FakeUsersRepository;
 let showProfile: ShowProfileService;
+let fakeCacheProvider: FakeCacheProvider;
 
 describe('ShowProfile', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
+    fakeCacheProvider = new FakeCacheProvider();
 
-    showProfile = new ShowProfileService(fakeUsersRepository);
+    showProfile = new ShowProfileService(
+      fakeUsersRepository,
+      fakeCacheProvider,
+    );
   });
 
   it('should be able to show the profile', async () => {

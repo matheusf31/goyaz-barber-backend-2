@@ -11,11 +11,11 @@ export default class FakeCacheProvider implements ICacheProvider {
     this.cache[key] = JSON.stringify(value);
   }
 
-  public async recover<T>(key: string): Promise<T | null> {
+  public async recover<T>(key: string): Promise<T | undefined> {
     const data = this.cache[key];
 
     if (!data) {
-      return null;
+      return undefined;
     }
 
     const parsedData = JSON.parse(data) as T;

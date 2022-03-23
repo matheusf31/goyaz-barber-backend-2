@@ -72,6 +72,8 @@ class UpdateProfileService {
       await this.cashProvider.invalidatePrefix('providers-list');
     }
 
+    await this.cashProvider.invalidate(`user:${user_id}`);
+
     return this.usersRepository.save(user);
   }
 }

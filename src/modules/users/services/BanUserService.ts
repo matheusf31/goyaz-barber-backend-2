@@ -2,6 +2,7 @@ import { injectable, inject } from 'tsyringe';
 
 import User from '@modules/users/infra/typeorm/entities/User';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
@@ -15,6 +16,9 @@ class BanUserService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('CacheProvider')
+    private cashProvider: ICacheProvider,
   ) {}
 
   public async execute({ user_id, banned }: IRequest): Promise<User> {
@@ -25,6 +29,8 @@ class BanUserService {
     }
 
     user.banned = !banned;
+
+    await this.cashProvider.invalidate(`user:${user_id}`);
 
     return this.usersRepository.save(user);
   }

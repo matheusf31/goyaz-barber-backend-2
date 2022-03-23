@@ -49,6 +49,8 @@ class UpdateUserAvatarService {
       await this.cashProvider.invalidatePrefix('providers-list');
     }
 
+    await this.cashProvider.invalidate(`user:${user_id}`);
+
     return user;
   }
 }
