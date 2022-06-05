@@ -13,7 +13,7 @@ export default class SessionsController {
     const { user, token } = await authenticateUser.execute({
       email,
       password,
-      device_id: device_id.toString(),
+      device_id: device_id?.toString() || '',
     });
 
     return response.json({ user: classToClass(user), token });

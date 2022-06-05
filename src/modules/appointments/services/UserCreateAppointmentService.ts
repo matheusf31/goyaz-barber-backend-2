@@ -9,6 +9,7 @@ import {
   addMinutes,
   subHours,
   differenceInMinutes,
+  differenceInSeconds,
 } from 'date-fns';
 import { ptBR, enUS } from 'date-fns/locale';
 import { HTTPError } from 'onesignal-node';
@@ -270,14 +271,14 @@ class UserCreateAppointmentService {
           ),
         };
 
-        await client.createNotification(notificationToClient);
+        const response = await client.createNotification(notificationToClient);
 
-        // await this.cacheProvider.save(
-        //   `notification@client-id:${user_id}@appointment-id:${appointment.id}`,
-        //   response.body.id,
-        //   'EX',
-        //   differenceInSeconds(appointment.date, new Date()),
-        // );
+        await this.cacheProvider.save(
+          `notification@client-id:${user_id}@appointment-id:${appointment.id}`,
+          response.body.id,
+          'EX',
+          differenceInSeconds(appointment.date, new Date()),
+        );
       }
     } catch (e) {
       if (e instanceof HTTPError) {

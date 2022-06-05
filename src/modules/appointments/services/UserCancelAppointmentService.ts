@@ -112,17 +112,21 @@ class UserCancelAppointmentService {
     try {
       await client.createNotification(notificationToProvider);
 
-      // const notificationId = await this.cacheProvider.recover<string>(
-      //   `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
-      // );
+      const notificationId = await this.cacheProvider.recover<string>(
+        `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
+      );
 
-      // if (notificationId) {
-      //   await client.cancelNotification(notificationId);
+      console.log(notificationId);
 
-      //   this.cacheProvider.invalidate(
-      //     `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
-      //   );
-      // }
+      if (notificationId) {
+        const response = await client.cancelNotification(notificationId);
+
+        console.log('response', response);
+
+        this.cacheProvider.invalidate(
+          `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
+        );
+      }
     } catch (e) {
       if (e instanceof HTTPError) {
         console.log(e.statusCode);
