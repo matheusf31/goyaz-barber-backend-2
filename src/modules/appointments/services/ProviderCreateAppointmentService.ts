@@ -70,31 +70,31 @@ class ProviderCreateAppointmentService {
 
     switch (service) {
       case 'corte':
-        price = 30;
+        price = 35;
         break;
 
       case 'barba':
-        price = 20;
+        price = 25;
         break;
 
       case 'corte e barba':
-        price = 45;
+        price = 55;
         break;
 
       case 'hot towel':
-        price = 30;
+        price = 35;
         break;
 
       case 'pezinho':
-        price = 10;
-        break;
-
-      case 'corte militar':
         price = 15;
         break;
 
+      case 'corte militar':
+        price = 20;
+        break;
+
       case 'corte e hot towel':
-        price = 55;
+        price = 65;
         break;
 
       default:
