@@ -271,6 +271,7 @@ class UserCreateAppointmentService {
           ),
         };
 
+        // test
         const response = await client.createNotification(notificationToClient);
 
         await this.cacheProvider.save(
