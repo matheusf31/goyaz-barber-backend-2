@@ -25,19 +25,19 @@ class ProviderDeleteAppointmentService {
       throw new AppError('O agendamento não foi encontrado.');
     }
 
-    if (appointment.user_id) {
-      const notificationId = await this.cacheProvider.recover<string>(
-        `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
-      );
+    // if (appointment.user_id) {
+    //   const notificationId = await this.cacheProvider.recover<string>(
+    //     `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
+    //   );
 
-      if (notificationId) {
-        await client.cancelNotification(notificationId);
+    //   if (notificationId) {
+    //     await client.cancelNotification(notificationId);
 
-        this.cacheProvider.invalidate(
-          `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
-        );
-      }
-    }
+    //     this.cacheProvider.invalidate(
+    //       `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
+    //     );
+    //   }
+    // }
 
     await this.appointmentsRepository.delete(appointment.id);
   }

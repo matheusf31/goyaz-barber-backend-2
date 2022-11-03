@@ -242,45 +242,45 @@ class UserCreateAppointmentService {
     try {
       await client.createNotification(notificationToProvider);
 
-      const userDeviceIds = await this.notificationsRepository.findDevicesById(
-        user_id,
-      );
+      // const userDeviceIds = await this.notificationsRepository.findDevicesById(
+      //   user_id,
+      // );
 
-      if (
-        userDeviceIds &&
-        differenceInMinutes(appointment.date, new Date()) > 60
-      ) {
-        const oneHourFromAppointmentDate = subHours(appointment.date, 1);
+      // if (
+      //   userDeviceIds &&
+      //   differenceInMinutes(appointment.date, new Date()) > 60
+      // ) {
+      //   const oneHourFromAppointmentDate = subHours(appointment.date, 1);
 
-        const notificationToClient: CreateNotificationBody = {
-          contents: {
-            en: `Appointment schedule to: ${formattedDateEN}. Avoid delays, please arrive in advance.`,
-            pt: `Agendamento marcado para ${formattedDateBR}. Evite atrasos, por gentileza chegue com antecedência.`,
-          },
-          headings: {
-            en: `You have a appointment today!`,
-            pt: `Você possui um agendamento hoje!`,
-          },
-          include_player_ids: userDeviceIds,
-          send_after: format(
-            oneHourFromAppointmentDate,
-            'ccc MMM dd yyyy pppp',
-            {
-              locale: ptBR,
-            },
-          ),
-        };
+      //   const notificationToClient: CreateNotificationBody = {
+      //     contents: {
+      //       en: `Appointment schedule to: ${formattedDateEN}. Avoid delays, please arrive in advance.`,
+      //       pt: `Agendamento marcado para ${formattedDateBR}. Evite atrasos, por gentileza chegue com antecedência.`,
+      //     },
+      //     headings: {
+      //       en: `You have a appointment today!`,
+      //       pt: `Você possui um agendamento hoje!`,
+      //     },
+      //     include_player_ids: userDeviceIds,
+      //     send_after: format(
+      //       oneHourFromAppointmentDate,
+      //       'ccc MMM dd yyyy pppp',
+      //       {
+      //         locale: ptBR,
+      //       },
+      //     ),
+      //   };
 
-        // test
-        const response = await client.createNotification(notificationToClient);
+      //   // test
+      //   const response = await client.createNotification(notificationToClient);
 
-        await this.cacheProvider.save(
-          `notification@client-id:${user_id}@appointment-id:${appointment.id}`,
-          response.body.id,
-          'EX',
-          differenceInSeconds(appointment.date, new Date()),
-        );
-      }
+      //   await this.cacheProvider.save(
+      //     `notification@client-id:${user_id}@appointment-id:${appointment.id}`,
+      //     response.body.id,
+      //     'EX',
+      //     differenceInSeconds(appointment.date, new Date()),
+      //   );
+      // }
     } catch (e) {
       if (e instanceof HTTPError) {
         // When status code of HTTP response is not 2xx, HTTPError is thrown.

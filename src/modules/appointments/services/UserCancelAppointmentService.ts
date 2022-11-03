@@ -109,30 +109,30 @@ class UserCancelAppointmentService {
       include_player_ids: providerDeviceIds,
     };
 
-    try {
-      await client.createNotification(notificationToProvider);
+    // try {
+    //   await client.createNotification(notificationToProvider);
 
-      const notificationId = await this.cacheProvider.recover<string>(
-        `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
-      );
+    //   const notificationId = await this.cacheProvider.recover<string>(
+    //     `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
+    //   );
 
-      console.log(notificationId);
+    //   console.log(notificationId);
 
-      if (notificationId) {
-        const response = await client.cancelNotification(notificationId);
+    //   if (notificationId) {
+    //     const response = await client.cancelNotification(notificationId);
 
-        console.log('response', response);
+    //     console.log('response', response);
 
-        this.cacheProvider.invalidate(
-          `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
-        );
-      }
-    } catch (e) {
-      if (e instanceof HTTPError) {
-        console.log(e.statusCode);
-        console.log(e.body);
-      }
-    }
+    //     this.cacheProvider.invalidate(
+    //       `notification@client-id:${appointment.user_id}@appointment-id:${appointment.id}`,
+    //     );
+    //   }
+    // } catch (e) {
+    //   if (e instanceof HTTPError) {
+    //     console.log(e.statusCode);
+    //     console.log(e.body);
+    //   }
+    // }
 
     appointment.canceled_at = new Date(Date.now());
 

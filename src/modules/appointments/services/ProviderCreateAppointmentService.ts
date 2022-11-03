@@ -110,70 +110,70 @@ class ProviderCreateAppointmentService {
       foreign_client_name,
     });
 
-    if (user_id && differenceInMinutes(appointment.date, new Date()) > 60) {
-      const oneHourFromAppointmentDate = subHours(appointment.date, 1);
+    // if (user_id && differenceInMinutes(appointment.date, new Date()) > 60) {
+    //   const oneHourFromAppointmentDate = subHours(appointment.date, 1);
 
-      let formattedDateBR = '';
-      let formattedDateEN = '';
+    //   let formattedDateBR = '';
+    //   let formattedDateEN = '';
 
-      if (differenceInDays(date, new Date()) >= 6) {
-        formattedDateBR = format(date, 'dd/MM/RR - HH:mm', {
-          locale: ptBR,
-        });
+    //   if (differenceInDays(date, new Date()) >= 6) {
+    //     formattedDateBR = format(date, 'dd/MM/RR - HH:mm', {
+    //       locale: ptBR,
+    //     });
 
-        formattedDateEN = format(date, 'dd/MM/RR - HH:mm', {
-          locale: enUS,
-        });
-      } else {
-        formattedDateBR = formatRelative(date, new Date(), {
-          locale: ptBR,
-        });
+    //     formattedDateEN = format(date, 'dd/MM/RR - HH:mm', {
+    //       locale: enUS,
+    //     });
+    //   } else {
+    //     formattedDateBR = formatRelative(date, new Date(), {
+    //       locale: ptBR,
+    //     });
 
-        formattedDateEN = formatRelative(date, new Date(), {
-          locale: enUS,
-        });
-      }
+    //     formattedDateEN = formatRelative(date, new Date(), {
+    //       locale: enUS,
+    //     });
+    //   }
 
-      const userDeviceIds = await this.notificationsRepository.findDevicesById(
-        user_id,
-      );
+    //   const userDeviceIds = await this.notificationsRepository.findDevicesById(
+    //     user_id,
+    //   );
 
-      if (userDeviceIds.length !== 0) {
-        const notificationToClient: CreateNotificationBody = {
-          contents: {
-            en: `Appointment schedule to: ${formattedDateEN}. Avoid delays, please arrive in advance.`,
-            pt: `Agendamento marcado para: ${formattedDateBR}. Evite atrasos, por gentileza chegue com antecedência.`,
-          },
-          headings: {
-            en: `You have a appointment today!`,
-            pt: `Você possui um agendamento hoje!`,
-          },
-          include_player_ids: userDeviceIds,
-          send_after: format(
-            oneHourFromAppointmentDate,
-            'ccc MMM dd yyyy pppp',
-            {
-              locale: ptBR,
-            },
-          ),
-        };
+    //   if (userDeviceIds.length !== 0) {
+    //     const notificationToClient: CreateNotificationBody = {
+    //       contents: {
+    //         en: `Appointment schedule to: ${formattedDateEN}. Avoid delays, please arrive in advance.`,
+    //         pt: `Agendamento marcado para: ${formattedDateBR}. Evite atrasos, por gentileza chegue com antecedência.`,
+    //       },
+    //       headings: {
+    //         en: `You have a appointment today!`,
+    //         pt: `Você possui um agendamento hoje!`,
+    //       },
+    //       include_player_ids: userDeviceIds,
+    //       send_after: format(
+    //         oneHourFromAppointmentDate,
+    //         'ccc MMM dd yyyy pppp',
+    //         {
+    //           locale: ptBR,
+    //         },
+    //       ),
+    //     };
 
-        try {
-          const response = await client.createNotification(
-            notificationToClient,
-          );
+    //     try {
+    //       const response = await client.createNotification(
+    //         notificationToClient,
+    //       );
 
-          await this.cacheProvider.save(
-            `notification@client-id:${user_id}@appointment-id:${appointment.id}`,
-            response.body.id,
-            'EX',
-            differenceInSeconds(appointment.date, new Date()),
-          );
-        } catch (e) {
-          console.log('Erro ao marcar notificação!', e);
-        }
-      }
-    }
+    //       await this.cacheProvider.save(
+    //         `notification@client-id:${user_id}@appointment-id:${appointment.id}`,
+    //         response.body.id,
+    //         'EX',
+    //         differenceInSeconds(appointment.date, new Date()),
+    //       );
+    //     } catch (e) {
+    //       console.log('Erro ao marcar notificação!', e);
+    //     }
+    //   }
+    // }
 
     return appointment;
   }
